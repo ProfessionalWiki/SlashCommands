@@ -18,7 +18,7 @@ Platform requirements:
 Installation instructions:
 
 * Clone extension into `extensions/SlashCommands/`
-* TODO: run JS build?
+* Run this in the new directory: `make visual-editor-install && make visual-editor-build`
 * Add `wfLoadExtension( 'SlashCommands' );` to `LocalSettings.php`
 
 ## Development
