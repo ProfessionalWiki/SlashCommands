@@ -1,22 +1,17 @@
 {
 	"name": "professional-wiki/slash-commands",
 	"license": "proprietary",
-	"description": "TODO",
+	"description": "Adds slash commands to the Visual Editor",
 	"authors": [
 		{
-			"name": "Professional.Wiki",
+			"name": "Professional Wiki",
 			"email": "info@professional.wiki",
 			"homepage": "https://Professional.Wiki"
-		},
-		{
-			"name": "Jeroen De Dauw",
-			"email": "jeroendedauw@gmail.com",
-			"homepage": "https://www.EntropyWins.wtf/mediawiki"
 		}
 	],
 	"require": {
 		"ext-json": "*",
-		"php": "^8.1",
+		"php": "^7.4",
 		"composer/installers": "^2|^1.0.1"
 	},
 	"config": {
