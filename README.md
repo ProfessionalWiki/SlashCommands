@@ -1,9 +1,10 @@
 # Slash Commands
 
+MediaWiki extension that adds "slash commands" to the Visual Editor.
+
 **Table of Contents**
 
 - [Installation](#installation)
-- [PHP Configuration](#php-configuration)
 - [Development](#development)
 - [Release notes](#release-notes)
 
