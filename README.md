@@ -13,7 +13,7 @@ MediaWiki extension that adds "slash commands" to the Visual Editor.
 Platform requirements:
 
 * [PHP] 7.4 or later (tested with 8.1)
-* [MediaWiki] 1.35 or later (tested with 1.39)
+* [MediaWiki] 1.39 or later (tested with 1.39)
 
 Installation instructions:
 
