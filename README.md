@@ -18,7 +18,6 @@ Platform requirements:
 Installation instructions:
 
 * Clone extension into `extensions/SlashCommands/`
-* Run this in the new directory: `make visual-editor-install && make visual-editor-build`
 * Add `wfLoadExtension( 'SlashCommands' );` to `LocalSettings.php`
 
 ## Development
@@ -26,6 +25,7 @@ Installation instructions:
 * Setup node environment: `make visual-editor-install`
 * Build the assets: `make visual-editor-build`
 * Lint (and reformat): `make visual-editor-lint`
+* To add production assets to git: `make add-production-assets`
 
 ## Release notes
 

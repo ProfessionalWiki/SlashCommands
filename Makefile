@@ -56,3 +56,6 @@ visual-editor-lint:
 visual-editor:
 	$(MAKE) visual-editor-build
 	$(MAKE) visual-editor-lint
+
+add-production-assets:
+	git add -f resources/visual-editor/dist/assets
