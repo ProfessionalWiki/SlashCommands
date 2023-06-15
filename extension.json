@@ -1,11 +1,10 @@
 {
 	"name": "SlashCommands",
 
-	"version": "0.1.0-alpha",
+	"version": "1.0.0",
 
 	"author": [
-		"[https://Professional.Wiki/ Professional.Wiki]",
-		"[https://www.EntropyWins.wtf/mediawiki Jeroen De Dauw]"
+		"[https://Professional.Wiki/ Professional.Wiki]"
 	],
 
 	"url": "https://github.com/ProfessionalWiki/SlashCommands",

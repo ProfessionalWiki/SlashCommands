@@ -29,9 +29,13 @@ Installation instructions:
 
 ## Release notes
 
-### Version 1.0.0 - not yet released
+### Version 1.0.0 - 2023-06-15
 
-* TODO
+Initial release
+
+* Support for MediaWiki 1.39
+* Support for PHP 7.4 and above
+* Slash command menu with formatting, list, and insert commands
 
 [Professional.Wiki]: https://professional.wiki
 [MediaWiki]: https://www.mediawiki.org
