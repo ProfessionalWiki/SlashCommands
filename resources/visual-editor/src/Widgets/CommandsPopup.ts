@@ -74,9 +74,7 @@ export class CommandsPopup {
 	}
 
 	public async setContent(): Promise<void> {
-		await this.commandsResolver.getCommands(
-			( commandsList ) => this.setBodyHtml( commandsList )
-		);
+		this.setBodyHtml( await this.commandsResolver.getCommands() );
 	}
 
 	private setBodyHtml( commandsList: Command[] ): void {
@@ -84,11 +82,8 @@ export class CommandsPopup {
 		this.popup.$body.find( '.commands-list' ).html( content );
 	}
 
-	public updateContent( search: string ): void {
-		this.commandsResolver.getCommands(
-			( commandsList ) => this.updateBodyHtml( commandsList ),
-			search
-		);
+	public async updateContent( search: string ): Promise<void> {
+		this.updateBodyHtml( await this.commandsResolver.getCommands( search ) );
 	}
 
 	private updateBodyHtml( commandsList: Command[] ): void {
