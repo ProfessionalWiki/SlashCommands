@@ -13,22 +13,23 @@ export class CommandsResolver {
 	public getInsertGroupCommands(): Promise<Command[]> {
 		return new Promise( ( resolve ) => {
 			setTimeout( () => {
-				const toolbar = ve.init.target.toolbar;
-				const insertGroup = toolbar.groupsByName.insert;
-				const tools = insertGroup.tools;
 				const commandsList = [];
 
-				Object.keys( tools ).forEach( function ( key ): void {
-					const item = tools[ key ];
-					if ( item.disabled === false ) {
-						commandsList.push( {
-							command: key,
-							icon: item.icon,
-							title: item.title,
-							visible: true
-						} );
-					}
-				} );
+				for ( const groupName of [ 'style', 'insert', 'structure' ] ) {
+					const tools = ve.init.target.toolbar.groupsByName[groupName].tools;
+
+					Object.keys( tools ).forEach( function ( key ): void {
+						const item = tools[ key ];
+						if ( item.disabled === false ) {
+							commandsList.push( {
+								command: key,
+								icon: item.icon,
+								title: item.title,
+								visible: true
+							} );
+						}
+					} );
+				}
 
 				resolve( commandsList );
 			} );
