@@ -1,0 +1,57 @@
+{
+	"name": "SlashCommands",
+
+	"version": "0.1.0-alpha",
+
+	"author": [
+		"[https://Professional.Wiki/ Professional.Wiki]",
+		"[https://www.EntropyWins.wtf/mediawiki Jeroen De Dauw]"
+	],
+
+	"url": "https://github.com/ProfessionalWiki/SlashCommands",
+
+	"descriptionmsg": "slash-commands-description",
+
+	"requires": {
+		"MediaWiki": ">= 1.39.0"
+	},
+
+	"MessagesDirs": {
+		"SlashCommands": [
+			"i18n"
+		]
+	},
+
+	"ResourceFileModulePaths": {
+		"localBasePath": "resources",
+		"remoteExtPath": "SlashCommands/resources"
+	},
+
+	"ResourceModules": {
+		"ext.slash-commands.visual-editor": {
+			"dependencies": [
+				"ext.visualEditor.mwcore",
+				"ext.visualEditor.mwimage.core",
+				"mediawiki.widgets.Table"
+			],
+			"packageFiles": [
+				"visual-editor/dist/assets/index.js"
+			],
+			"styles": [
+				"visual-editor/dist/assets/index.css"
+			],
+			"messages": [
+			]
+		}
+	},
+
+	"attributes": {
+		"VisualEditor": {
+			"PluginModules": [
+				"ext.slash-commands.visual-editor"
+			]
+		}
+	},
+
+	"manifest_version": 2
+}

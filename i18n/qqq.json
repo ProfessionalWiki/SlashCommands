@@ -1,0 +1,11 @@
+{
+	"@metadata": {
+		"authors": [
+			"Jeroen De Dauw",
+			"Karsten Hoffmeyer",
+			"Morne Alberts"
+		]
+	},
+	"slash-commands-name": "{{Name}}",
+	"slash-commands-description": "{{Desc|name=SlashCommands|url=https://github.com/ProfessionalWiki/SlashCommands}}",
+}

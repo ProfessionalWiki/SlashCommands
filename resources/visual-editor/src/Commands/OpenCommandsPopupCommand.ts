@@ -1,0 +1,253 @@
+import { CommandsPopup } from '../Widgets/CommandsPopup.ts';
+import {
+	CommandsStore,
+	REPLACE_FRAGMENT,
+	SEARCH_FRAGMENT,
+	START_FRAGMENT, WRAP_BLOCK_ID
+} from '../Stores/CommandsStore.ts';
+import { FragmentResolver } from '../Application/Resolvers/FragmentResolver.ts';
+import { CommandsResolver } from '../Application/Resolvers/CommandsResolver.ts';
+
+interface EventObject extends Event {
+	target: HTMLElement;
+	keyCode: number;
+}
+
+interface OpenFn extends Function {
+	(): void;
+	super: any;
+}
+
+export const OPEN_COMMANDS_POPUP = 'openCommandsPopup';
+
+export class OpenCommandsPopupCommand {
+
+	private readonly commandName: string = OPEN_COMMANDS_POPUP;
+	private readonly popup: OO.ui.PopupWidget;
+	private ID: string;
+	private surface: typeof ve.ui.Surface;
+
+	public constructor(
+		private readonly popupObject: CommandsPopup,
+		private readonly executeSymbol: string,
+		private readonly fragmentResolver: FragmentResolver,
+		public readonly commandsResolver: CommandsResolver
+	) {
+		this.popup = popupObject.getInstance();
+	}
+
+	public setUp(): void {
+		const commandName = this.commandName;
+		const executeSymbol = this.executeSymbol;
+
+		const CommandsPopupCommand = <OpenFn> function VeUiCommandsPopupCommand() {
+			CommandsPopupCommand.super.call(
+				this,
+				commandName
+			);
+		};
+		OO.inheritClass( CommandsPopupCommand, ve.ui.Command );
+
+		CommandsPopupCommand.prototype.execute = ( surface: typeof ve.ui.Surface ): boolean => {
+			if ( this.popup.isVisible() ) {
+				return false;
+			}
+
+			this.surface = surface;
+			this.setID();
+
+			setTimeout( () => {
+				this.wrapCommandRunningSymbol();
+				this.setCursorPosition();
+				this.showPopup();
+				this.bindEvents();
+				this.focusFirstCommand();
+			} );
+
+			return true;
+		};
+
+		ve.ui.commandRegistry.register( new CommandsPopupCommand() );
+
+		ve.ui.sequenceRegistry.register(
+			new ve.ui.Sequence(
+				commandName,
+				commandName,
+				executeSymbol
+			)
+		);
+	}
+
+	private setID(): void {
+		const idName = 'commands-popup-';
+		const uID = this.makeID( 7 );
+
+		this.ID = '#' + idName + uID;
+		CommandsStore.set( WRAP_BLOCK_ID, idName + uID );
+	}
+
+	private makeID( length ): string {
+		let result = '';
+		const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+		const charactersLength = characters.length;
+		let counter = 0;
+		while ( counter < length ) {
+			result += characters.charAt( Math.floor( Math.random() * charactersLength ) );
+			counter += 1;
+		}
+		return result;
+	}
+
+	private wrapCommandRunningSymbol(): void {
+
+		const surfaceModel = this.surface.getModel();
+		const currentFragment = surfaceModel.getFragment();
+		CommandsStore.set( START_FRAGMENT, currentFragment );
+
+		const replaceFragment = surfaceModel.getLinearFragment( new ve.Range(
+			currentFragment.selection.range.end - 1,
+			currentFragment.selection.range.end
+		) );
+
+		replaceFragment.annotateContent( 'set', 'textStyle/userInput' );
+		CommandsStore.set( REPLACE_FRAGMENT, replaceFragment );
+	}
+
+	private setCursorPosition(): void {
+
+		const replaceFragment = CommandsStore.get( REPLACE_FRAGMENT );
+
+		const cursorFragment = this.surface.getModel().getLinearFragment( new ve.Range(
+			replaceFragment.selection.range.end + 1,
+			replaceFragment.selection.range.end + 1
+		) );
+		cursorFragment.select();
+	}
+
+	private showPopup(): void {
+
+		const position = $( document ).find( this.ID ).last().offset();
+
+		this.popup.toggle( true );
+
+		$( document ).find( '.insert-commands-list-wrap' ).css( {
+			top: ( position.top + 17 ) + 'px',
+			left: position.left + 'px'
+		} );
+	}
+
+	private bindEvents(): void {
+		const searchEl = this.surface.$element.find( this.ID );
+		searchEl.on( 'DOMSubtreeModified', ( e ) => this.searchCommand( e ) );
+
+		this.bindKeydownEvent();
+	}
+
+	private bindKeydownEvent(): void {
+		const editableEl = this.surface.$element.find( '.ve-ce-rootNode[contenteditable="true"]' );
+
+		editableEl/* .off('keydown') */.on( 'keydown', ( e: EventObject ) => {
+			this.tapCommandsBlock( e );
+			this.closePopup( e );
+			return this.runCommand( e );
+		} );
+	}
+
+	private focusFirstCommand(): void {
+		setTimeout( () => {
+			const elements = this.popup.$body.find( '.commands-list .insert-command' );
+			elements.removeClass( 'selected' );
+			elements.first().addClass( 'selected' );
+		} );
+	}
+
+	private searchCommand( e: EventObject ): void {
+		let searchText = e.target.innerText;
+		if ( searchText.length ) {
+			searchText = searchText.replace( '/', '' );
+		}
+
+		CommandsStore.set( SEARCH_FRAGMENT, searchText );
+
+		this.popupObject.updateContent( searchText );
+
+		this.focusFirstCommand();
+		// setTimeout(this.bindKeydownEvent);
+	}
+
+	private closePopup( e: EventObject ): void {
+		const keys = [ 37, 39, 8, 9 ];
+		const searchFragment = this.surface.getModel().getFragment();
+
+		if (
+			e.keyCode !== undefined &&
+			keys.includes( e.keyCode ) &&
+			( !this.fragmentResolver.isSearchFragmentExist() ||
+			this.fragmentResolver.isOutsideSearchRange( searchFragment ) ) &&
+			this.popup.isVisible()
+		) {
+			this.popup.toggle( false );
+		}
+	}
+
+	private tapCommandsBlock( e: EventObject ): void {
+		const keys = [ 38, 40 ];
+		const searchFragment = this.surface.getModel().getFragment();
+
+		if (
+			e.keyCode !== undefined &&
+			keys.includes( e.keyCode ) &&
+			this.fragmentResolver.isSearchFragmentExist() &&
+			( this.fragmentResolver.isSearchFragmentEmpty() ||
+			!this.fragmentResolver.isOutsideSearchRange( searchFragment, true ) ) &&
+			this.popup.isVisible()
+		) {
+			e.preventDefault();
+
+			const focusElem = document.querySelector( '.commands-list>.insert-command.selected' );
+			const allElems = document.querySelectorAll( '.commands-list>.insert-command' );
+			const tabElements = [ ...allElems ];
+			const tabElementsCount = tabElements.length - 1;
+
+			if ( !tabElements.includes( focusElem ) ) {
+				return;
+			}
+
+			const focusIndex = tabElements.indexOf( focusElem );
+			let elemToFocus;
+
+			if ( e.keyCode === 38 ) { // ArrowUp
+				elemToFocus = tabElements[ focusIndex > 0 ? focusIndex - 1 : tabElementsCount ];
+			}
+
+			if ( e.keyCode === 40 ) { // ArrowDown
+				elemToFocus = tabElements[ focusIndex < tabElementsCount ? focusIndex + 1 : 0 ];
+			}
+
+			focusElem.classList.remove( 'selected' );
+			elemToFocus.classList.add( 'selected' );
+		}
+	}
+
+	private runCommand( e: EventObject ): boolean {
+		const keys = [ 13 ]; // enter key
+
+		if (
+			e.keyCode !== undefined &&
+			keys.includes( e.keyCode ) &&
+			this.popup.isVisible()
+		) {
+			e.preventDefault();
+
+			const focusElem: HTMLElement = document.querySelector( '.commands-list>.insert-command.selected' );
+
+			return this.commandsResolver.executeCommandWithElement(
+				this.popup,
+				e,
+				this.fragmentResolver,
+				focusElem
+			);
+		}
+		return true;
+	}
+}

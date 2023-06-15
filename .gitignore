@@ -1,0 +1,5 @@
+node_modules/
+vendor/
+.eslintcache
+.phpunit.result.cache
+src/nohup.out

@@ -1,0 +1,121 @@
+import {
+	COMMANDS_LIST_LENGHT,
+	CommandsStore, COUNT_NO_RESULTS_TRYING,
+	REPLACE_FRAGMENT, SEARCH_FRAGMENT, START_FRAGMENT, WRAP_BLOCK_ID
+} from '../Stores/CommandsStore.ts';
+import { CommandsPopupFactory, CommandsPopupWidget } from './Factories/CommandsPopupFactory.ts';
+import { FragmentResolver } from '../Application/Resolvers/FragmentResolver.ts';
+import { Command, CommandsResolver } from '../Application/Resolvers/CommandsResolver.ts';
+
+const COMMAND_CLASS_NAME = 'insert-command';
+export const NO_RESULTS = 'no-results';
+
+export class CommandsPopup {
+
+	private readonly popup: OO.ui.PopupWidget;
+	private readonly className: string = 'insert-commands-list-wrap';
+	public readonly commandClassName: string = COMMAND_CLASS_NAME;
+
+	public constructor(
+		private readonly fragmentResolver: FragmentResolver,
+		private readonly commandsResolver: CommandsResolver
+	) {
+		this.popup = CommandsPopupFactory.create( {
+			$content: $( '<div class="commands-list"></div>' ),
+			classes: [ this.className ],
+			hideCloseButton: true,
+			anchor: false,
+			autoClose: true,
+			autoFlip: true,
+			position: 'after',
+			verticalPosition: 'above',
+			hideWhenOutOfView: true,
+			width: 210
+		}, commandsResolver, fragmentResolver );
+
+		this.setClosingHookHandler();
+
+		document.body.appendChild( this.popup.$element[ 0 ] );
+	}
+
+	public getInstance(): CommandsPopupWidget {
+		return this.popup;
+	}
+
+	public static getCommandClassName(): string {
+		return COMMAND_CLASS_NAME;
+	}
+
+	public setClosingHookHandler(): void {
+		this.popup.on( 'closing', (): void => {
+			this.clearContent();
+		} );
+	}
+
+	private async clearContent(): Promise<void> {
+		if ( this.fragmentResolver.isSearchFragmentExist() ) {
+			this.fragmentResolver.replaceSearchFragment();
+		}
+		await this.setContent();
+
+		const surface = ve.init.target?.getSurface();
+		const ID = '#commands-popup-' + CommandsStore.get( WRAP_BLOCK_ID );
+		const searchEl = surface.$element.find( ID );
+		const editableEl = surface.$element.find( '.ve-ce-rootNode[contenteditable="true"]' );
+		searchEl.off( 'DOMSubtreeModified' );
+		editableEl.off( 'keydown' );
+
+		CommandsStore.clear( START_FRAGMENT );
+		CommandsStore.clear( REPLACE_FRAGMENT );
+		CommandsStore.clear( SEARCH_FRAGMENT );
+		CommandsStore.clear( WRAP_BLOCK_ID );
+		CommandsStore.set( COMMANDS_LIST_LENGHT, 0 );
+		CommandsStore.set( COUNT_NO_RESULTS_TRYING, 0 );
+	}
+
+	public async setContent(): Promise<void> {
+		await this.commandsResolver.getCommands(
+			( commandsList ) => this.setBodyHtml( commandsList )
+		);
+	}
+
+	private setBodyHtml( commandsList: Command[] ): void {
+		const content = this.getCommandElTemplate( commandsList );
+		this.popup.$body.find( '.commands-list' ).html( content );
+	}
+
+	public updateContent( search: string ): void {
+		this.commandsResolver.getCommands(
+			( commandsList ) => this.updateBodyHtml( commandsList ),
+			search
+		);
+	}
+
+	private updateBodyHtml( commandsList: Command[] ): void {
+		let content = '';
+
+		if ( !commandsList.length ) {
+			content = `<span class="${this.commandClassName}" role="button" data-command="${NO_RESULTS}">No results</span>`;
+			const countNoResultsTrying = CommandsStore.get( COUNT_NO_RESULTS_TRYING );
+			CommandsStore.set( COUNT_NO_RESULTS_TRYING, ( countNoResultsTrying + 1 ) );
+		} else {
+			content = this.getCommandElTemplate( commandsList );
+		}
+
+		CommandsStore.set( COMMANDS_LIST_LENGHT, commandsList.length );
+
+		this.popup.$body.find( '.commands-list' ).html( content );
+	}
+
+	public getCommandElTemplate( commandsList: Command[] ): string {
+		let content = '';
+		commandsList.forEach( function ( commandData: Command, index ): void {
+			content += `<span class="${COMMAND_CLASS_NAME} ${!commandData.visible ? 'hidden' : 'active'}" tabindex="${index + 1}" role="button" data-command="${commandData.command}">
+					<span class="oo-ui-iconElement-icon oo-ui-icon-${commandData.icon}"></span>
+					<span class="oo-ui-tool-title">${commandData.title}</span>
+				</span>`;
+		} );
+
+		return content;
+	}
+}

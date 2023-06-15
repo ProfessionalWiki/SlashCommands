@@ -1,0 +1,14 @@
+{
+	"extends": "./tsconfig.app.json",
+	"exclude": [],
+	"compilerOptions": {
+		"composite": true,
+		"lib": [],
+		"types": [
+			"node",
+			"jsdom"
+		],
+		"allowJs": false,
+		"typeRoots": ["./node_modules/@types", "./src/types"]
+	}
+}
