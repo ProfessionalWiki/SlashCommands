@@ -1,4 +1,4 @@
-import { CommandsStore, INSERT_COMMANDS_LIST } from '../../Stores/CommandsStore.ts';
+import { CommandsStore, SLASH_COMMANDS_LIST } from '../../Stores/CommandsStore.ts';
 import { CommandsPopup, NO_RESULTS } from '../../Widgets/CommandsPopup.ts';
 import { FragmentResolver } from './FragmentResolver.ts';
 
@@ -10,13 +10,25 @@ export interface Command {
 }
 export class CommandsResolver {
 
-	public getInsertGroupCommands(): Promise<Command[]> {
+	public async getCommands( callback: ( commands: Command[] ) => void, search = '' ): Promise<void> {
+		let insertCommands = CommandsStore.get( SLASH_COMMANDS_LIST );
+
+		if ( !insertCommands || insertCommands.lenght ) {
+			CommandsStore.set( SLASH_COMMANDS_LIST, this.getCommandsFromTheToolbar() );
+		}
+
+		insertCommands = await CommandsStore.get( SLASH_COMMANDS_LIST );
+
+		callback( this.filterCommands( [ ...insertCommands ], search ) );
+	}
+
+	private getCommandsFromTheToolbar(): Promise<Command[]> {
 		return new Promise( ( resolve ) => {
 			setTimeout( () => {
 				const commandsList = [];
 
 				for ( const groupName of [ 'style', 'insert', 'structure' ] ) {
-					const tools = ve.init.target.toolbar.groupsByName[groupName].tools;
+					const tools = ve.init.target.toolbar.groupsByName[ groupName ].tools;
 
 					Object.keys( tools ).forEach( function ( key ): void {
 						const item = tools[ key ];
@@ -36,20 +48,7 @@ export class CommandsResolver {
 		} );
 	}
 
-	public async getCommands( callback: ( commands: Command[] ) => void, search = '' ): Promise<void> {
-		let insertCommands = CommandsStore.get( INSERT_COMMANDS_LIST );
-
-		if ( !insertCommands || insertCommands.lenght ) {
-			CommandsStore.set( INSERT_COMMANDS_LIST, this.getInsertGroupCommands() );
-		}
-
-		insertCommands = await CommandsStore.get( INSERT_COMMANDS_LIST );
-
-		callback( this.filterCommands( [ ...insertCommands ], search ) );
-	}
-
 	public filterCommands( insertCommands: Command[], search: string ): Command[] {
-
 		if ( search ) {
 			insertCommands = insertCommands.filter( ( item ) => {
 				return item.title.toLowerCase().includes( search.toLowerCase() );
@@ -57,10 +56,6 @@ export class CommandsResolver {
 		}
 
 		return insertCommands;
-	}
-
-	public getAllCommands(): object {
-		return ve.ui.commandRegistry.registry;
 	}
 
 	public executeCommandWithElement(
@@ -108,4 +103,9 @@ export class CommandsResolver {
 		}
 		return true;
 	}
+
+	private getAllCommands(): object {
+		return ve.ui.commandRegistry.registry;
+	}
+
 }
