@@ -1,6 +1,3 @@
-NEO4J_BOLT_URL_OVERRIDE ?= bolt://neo4j:password@test_neo:7688
-export NEO4J_BOLT_URL_OVERRIDE
-
 .PHONY: ci test cs phpunit phpcs stan psalm
 
 ci: test cs parser
