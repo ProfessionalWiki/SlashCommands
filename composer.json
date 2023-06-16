@@ -10,15 +10,12 @@
 		}
 	],
 	"require": {
-		"ext-json": "*",
-		"php": "^7.4",
+		"php": "^8|^7.4",
 		"composer/installers": "^2|^1.0.1"
 	},
 	"config": {
 		"allow-plugins": {
-			"composer/installers": true,
-			"php-http/discovery": true,
-			"dealerdirect/phpcodesniffer-composer-installer": true
+			"composer/installers": true
 		}
 	},
 	"extra": {
