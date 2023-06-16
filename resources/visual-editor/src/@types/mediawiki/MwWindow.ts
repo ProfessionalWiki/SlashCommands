@@ -1,4 +1,4 @@
-import type { RestResponse } from 'types-mediawiki/mw/Rest.d.ts';
+import type { RestResponse } from 'types-mediawiki/mw/Rest';
 
 /** @see https://doc.wikimedia.org/mediawiki-core/master/js/#!/api/mw.Api-property-defaultOptions */
 interface ApiOptions {

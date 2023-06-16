@@ -4,7 +4,7 @@
 /// <reference types="oojs-ui" />
 /* eslint-enable */
 
-import type { MediaWiki } from './mediawiki/MwWindow.ts';
+import type { MediaWiki } from './mediawiki/MwWindow';
 
 declare global {
 	interface Window {

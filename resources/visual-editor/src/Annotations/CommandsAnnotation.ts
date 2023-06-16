@@ -1,5 +1,5 @@
-import { CommandsStore, WRAP_BLOCK_ID } from '../Stores/CommandsStore.ts';
-import { CommandsPopupWidget } from '../Widgets/Factories/CommandsPopupFactory.ts';
+import { CommandsStore, WRAP_BLOCK_ID } from '../Stores/CommandsStore';
+import { CommandsPopupWidget } from '../Widgets/Factories/CommandsPopupFactory';
 
 interface AnnotationFn extends Function {
 	(): void;

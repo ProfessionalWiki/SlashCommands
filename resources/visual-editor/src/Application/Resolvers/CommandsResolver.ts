@@ -1,6 +1,6 @@
-import { CommandsStore, SLASH_COMMANDS_LIST } from '../../Stores/CommandsStore.ts';
-import { CommandsPopup, NO_RESULTS } from '../../Widgets/CommandsPopup.ts';
-import { FragmentResolver } from './FragmentResolver.ts';
+import { CommandsStore, SLASH_COMMANDS_LIST } from '../../Stores/CommandsStore';
+import { CommandsPopup, NO_RESULTS } from '../../Widgets/CommandsPopup';
+import { FragmentResolver } from './FragmentResolver';
 
 export interface Command {
 	command: string;

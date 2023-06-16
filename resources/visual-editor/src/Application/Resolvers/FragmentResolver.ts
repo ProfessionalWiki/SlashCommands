@@ -1,5 +1,5 @@
-import { CommandsStore, SEARCH_FRAGMENT, START_FRAGMENT } from '../../Stores/CommandsStore.ts';
-import { EXECUTE_SYMBOL } from '../CommandsController.ts';
+import { CommandsStore, SEARCH_FRAGMENT, START_FRAGMENT } from '../../Stores/CommandsStore';
+import { EXECUTE_SYMBOL } from '../CommandsController';
 
 export interface Range {
 	start: number;
