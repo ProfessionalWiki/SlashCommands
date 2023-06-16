@@ -1,12 +1,12 @@
-import { CommandsPopup } from '../Widgets/CommandsPopup.ts';
+import { CommandsPopup } from '../Widgets/CommandsPopup';
 import {
 	CommandsStore,
 	REPLACE_FRAGMENT,
 	SEARCH_FRAGMENT,
 	START_FRAGMENT, WRAP_BLOCK_ID
-} from '../Stores/CommandsStore.ts';
-import { FragmentResolver } from '../Application/Resolvers/FragmentResolver.ts';
-import { CommandsResolver } from '../Application/Resolvers/CommandsResolver.ts';
+} from '../Stores/CommandsStore';
+import { FragmentResolver } from '../Application/Resolvers/FragmentResolver';
+import { CommandsResolver } from '../Application/Resolvers/CommandsResolver';
 
 interface EventObject extends Event {
 	target: HTMLElement;

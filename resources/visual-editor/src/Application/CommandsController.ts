@@ -1,9 +1,9 @@
-import type { CommandsPopup } from '../Widgets/CommandsPopup.ts';
-import { CommandsAnnotation } from '../Annotations/CommandsAnnotation.ts';
-import { OpenCommandsPopupCommand } from '../Commands/OpenCommandsPopupCommand.ts';
-import { CloseCommandsPopupCommand } from '../Commands/CloseCommandsPopupCommand.ts';
-import { FragmentResolver } from './Resolvers/FragmentResolver.ts';
-import { CommandsResolver } from './Resolvers/CommandsResolver.ts';
+import type { CommandsPopup } from '../Widgets/CommandsPopup';
+import { CommandsAnnotation } from '../Annotations/CommandsAnnotation';
+import { OpenCommandsPopupCommand } from '../Commands/OpenCommandsPopupCommand';
+import { CloseCommandsPopupCommand } from '../Commands/CloseCommandsPopupCommand';
+import { FragmentResolver } from './Resolvers/FragmentResolver';
+import { CommandsResolver } from './Resolvers/CommandsResolver';
 
 export const EXECUTE_SYMBOL = '/';
 

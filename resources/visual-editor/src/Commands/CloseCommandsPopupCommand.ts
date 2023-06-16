@@ -1,6 +1,6 @@
-import { CommandsPopup } from '../Widgets/CommandsPopup.ts';
-import { CommandsStore, COUNT_NO_RESULTS_TRYING } from '../Stores/CommandsStore.ts';
-import { FragmentResolver } from '../Application/Resolvers/FragmentResolver.ts';
+import { CommandsPopup } from '../Widgets/CommandsPopup';
+import { CommandsStore, COUNT_NO_RESULTS_TRYING } from '../Stores/CommandsStore';
+import { FragmentResolver } from '../Application/Resolvers/FragmentResolver';
 
 interface CloseFn extends Function {
 	(): void;

@@ -2,10 +2,10 @@ import {
 	COMMANDS_LIST_LENGHT,
 	CommandsStore, COUNT_NO_RESULTS_TRYING,
 	REPLACE_FRAGMENT, SEARCH_FRAGMENT, START_FRAGMENT, WRAP_BLOCK_ID
-} from '../Stores/CommandsStore.ts';
-import { CommandsPopupFactory, CommandsPopupWidget } from './Factories/CommandsPopupFactory.ts';
-import { FragmentResolver } from '../Application/Resolvers/FragmentResolver.ts';
-import { Command, CommandsResolver } from '../Application/Resolvers/CommandsResolver.ts';
+} from '../Stores/CommandsStore';
+import { CommandsPopupFactory, CommandsPopupWidget } from './Factories/CommandsPopupFactory';
+import { FragmentResolver } from '../Application/Resolvers/FragmentResolver';
+import { Command, CommandsResolver } from '../Application/Resolvers/CommandsResolver';
 
 const COMMAND_CLASS_NAME = 'insert-command';
 export const NO_RESULTS = 'no-results';

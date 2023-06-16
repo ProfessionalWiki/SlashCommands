@@ -1,8 +1,8 @@
 import './main.scss';
-import { CommandsController } from './Application/CommandsController.ts';
-import { CommandsPopup } from './Widgets/CommandsPopup.ts';
-import { FragmentResolver } from './Application/Resolvers/FragmentResolver.ts';
-import { CommandsResolver } from './Application/Resolvers/CommandsResolver.ts';
+import { CommandsController } from './Application/CommandsController';
+import { CommandsPopup } from './Widgets/CommandsPopup';
+import { FragmentResolver } from './Application/Resolvers/FragmentResolver';
+import { CommandsResolver } from './Application/Resolvers/CommandsResolver';
 
 /**
  * Setup commands list popup

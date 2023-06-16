@@ -1,5 +1,5 @@
-import { CommandsResolver } from '../../Application/Resolvers/CommandsResolver.ts';
-import { FragmentResolver } from '../../Application/Resolvers/FragmentResolver.ts';
+import { CommandsResolver } from '../../Application/Resolvers/CommandsResolver';
+import { FragmentResolver } from '../../Application/Resolvers/FragmentResolver';
 
 export interface CommandsPopupWidget extends OO.ui.PopupWidget {}
 
