@@ -10,7 +10,7 @@ export interface Command {
 }
 export class CommandsResolver {
 
-	public async getCommands( callback: ( commands: Command[] ) => void, search = '' ): Promise<void> {
+	public async getCommands( search = '' ): Promise<Command[]> {
 		let insertCommands = CommandsStore.get( SLASH_COMMANDS_LIST );
 
 		if ( !insertCommands || insertCommands.lenght ) {
@@ -19,7 +19,7 @@ export class CommandsResolver {
 
 		insertCommands = await CommandsStore.get( SLASH_COMMANDS_LIST );
 
-		callback( this.filterCommands( [ ...insertCommands ], search ) );
+		return this.filterCommands( [ ...insertCommands ], search );
 	}
 
 	private getCommandsFromTheToolbar(): Promise<Command[]> {
