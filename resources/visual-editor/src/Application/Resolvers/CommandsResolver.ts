@@ -99,6 +99,8 @@ export class CommandsResolver {
 				setTimeout( () => {
 					commandsRegistry[ commandName ].execute( surface );
 				} );
+
+				return false;
 			}
 		}
 		return true;
