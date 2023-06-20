@@ -30,6 +30,8 @@ declare global {
 			const SurfaceFragment: any;
 			const modelRegistry: any;
 			const TextStyleAnnotation: any;
+			const annotationFactory: any;
+			const AnnotationSet: any;
 		}
 
 		namespace ce {

@@ -2,7 +2,6 @@ import { CommandsPopup } from '../Widgets/CommandsPopup';
 import {
 	CommandsStore,
 	REPLACE_FRAGMENT,
-	SEARCH_FRAGMENT,
 	START_FRAGMENT, WRAP_BLOCK_ID
 } from '../Stores/CommandsStore';
 import { FragmentResolver } from '../Application/Resolvers/FragmentResolver';
@@ -58,10 +57,10 @@ export class OpenCommandsPopupCommand {
 
 			setTimeout( () => {
 				this.wrapCommandRunningSymbol();
-				this.setCursorPosition();
 				this.showPopup();
 				this.bindEvents();
-				this.focusFirstCommand();
+				this.commandsResolver.focusFirstCommand( this.popup );
+				this.unwrapCommandRunningSymbol();
 			} );
 
 			return true;
@@ -113,17 +112,6 @@ export class OpenCommandsPopupCommand {
 		CommandsStore.set( REPLACE_FRAGMENT, replaceFragment );
 	}
 
-	private setCursorPosition(): void {
-
-		const replaceFragment = CommandsStore.get( REPLACE_FRAGMENT );
-
-		const cursorFragment = this.surface.getModel().getLinearFragment( new ve.Range(
-			replaceFragment.selection.range.end + 1,
-			replaceFragment.selection.range.end + 1
-		) );
-		cursorFragment.select();
-	}
-
 	private showPopup(): void {
 
 		const position = $( document ).find( this.ID ).last().offset();
@@ -135,11 +123,25 @@ export class OpenCommandsPopupCommand {
 			left: position.left + 'px'
 		} );
 	}
+	private unwrapCommandRunningSymbol(): void {
+		const surfaceModel = this.surface.getModel();
+		const currentFragment = surfaceModel.getFragment();
+
+		const replaceFragment = surfaceModel.getLinearFragment( new ve.Range(
+			currentFragment.selection.range.end - 1,
+			currentFragment.selection.range.end
+		) );
+
+		replaceFragment.annotateContent( 'clear', 'textStyle/userInput' );
+
+		const cursorFragment = surfaceModel.getLinearFragment( new ve.Range(
+			replaceFragment.selection.range.end,
+			replaceFragment.selection.range.end
+		) );
+		cursorFragment.select();
+	}
 
 	private bindEvents(): void {
-		const searchEl = this.surface.$element.find( this.ID );
-		searchEl.on( 'DOMSubtreeModified', ( e ) => this.searchCommand( e ) );
-
 		this.bindKeydownEvent();
 	}
 
@@ -153,30 +155,8 @@ export class OpenCommandsPopupCommand {
 		} );
 	}
 
-	private focusFirstCommand(): void {
-		setTimeout( () => {
-			const elements = this.popup.$body.find( '.commands-list .insert-command' );
-			elements.removeClass( 'selected' );
-			elements.first().addClass( 'selected' );
-		} );
-	}
-
-	private searchCommand( e: EventObject ): void {
-		let searchText = e.target.innerText;
-		if ( searchText.length ) {
-			searchText = searchText.replace( '/', '' );
-		}
-
-		CommandsStore.set( SEARCH_FRAGMENT, searchText );
-
-		this.popupObject.updateContent( searchText );
-
-		this.focusFirstCommand();
-		// setTimeout(this.bindKeydownEvent);
-	}
-
 	private closePopup( e: EventObject ): void {
-		const keys = [ 37, 39, 8, 9 ];
+		const keys = [ 37, 39, 9 ];
 		const searchFragment = this.surface.getModel().getFragment();
 
 		if (

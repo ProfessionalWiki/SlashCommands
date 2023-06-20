@@ -35,7 +35,8 @@ export class CommandsController {
 
 		const closePopupCommand = new CloseCommandsPopupCommand(
 			this.popup,
-			this.fragmentResolver
+			this.fragmentResolver,
+			this.commandsResolver
 		);
 		closePopupCommand.setUp();
 	}

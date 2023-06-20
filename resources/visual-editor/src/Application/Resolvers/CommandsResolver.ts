@@ -110,4 +110,11 @@ export class CommandsResolver {
 		return ve.ui.commandRegistry.registry;
 	}
 
+	public focusFirstCommand( popup: OO.ui.PopupWidget ): void {
+		setTimeout( () => {
+			const elements = popup.$body.find( '.commands-list .insert-command' );
+			elements.removeClass( 'selected' );
+			elements.first().addClass( 'selected' );
+		} );
+	}
 }
