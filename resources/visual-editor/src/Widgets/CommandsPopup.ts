@@ -53,16 +53,10 @@ export class CommandsPopup {
 	}
 
 	private async clearContent(): Promise<void> {
-		if ( this.fragmentResolver.isSearchFragmentExist() ) {
-			this.fragmentResolver.replaceSearchFragment();
-		}
 		await this.setContent();
 
 		const surface = ve.init.target?.getSurface();
-		const ID = '#commands-popup-' + CommandsStore.get( WRAP_BLOCK_ID );
-		const searchEl = surface.$element.find( ID );
 		const editableEl = surface.$element.find( '.ve-ce-rootNode[contenteditable="true"]' );
-		searchEl.off( 'DOMSubtreeModified' );
 		editableEl.off( 'keydown' );
 
 		CommandsStore.clear( START_FRAGMENT );
