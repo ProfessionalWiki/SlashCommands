@@ -114,15 +114,39 @@ export class OpenCommandsPopupCommand {
 
 	private showPopup(): void {
 
-		const position = $( document ).find( this.ID ).last().offset();
-
 		this.popup.toggle( true );
 
-		$( document ).find( '.insert-commands-list-wrap' ).css( {
-			top: ( position.top + 17 ) + 'px',
-			left: position.left + 'px'
-		} );
+		$( document )
+			.find( '.insert-commands-list-wrap' )
+			.css(
+				this.calculatePosition() as any
+			);
 	}
+
+	private calculatePosition(): object {
+		const popupHeight = 310;
+		const documentEl = $( document );
+		const windowHeight = $( window ).height();
+		const scrollTop = documentEl.scrollTop();
+		const position = documentEl.find( this.ID ).last().offset();
+
+		const top = position.top - scrollTop;
+		const bottom = windowHeight - top;
+
+		if ( bottom < popupHeight ) {
+			return {
+				top: 'unset',
+				bottom: ( bottom + 7 ) + 'px',
+				left: position.left + 'px'
+			};
+		}
+
+		return {
+			top: ( top + 17 ) + 'px',
+			left: position.left + 'px'
+		};
+	}
+
 	private unwrapCommandRunningSymbol(): void {
 		const surfaceModel = this.surface.getModel();
 		const currentFragment = surfaceModel.getFragment();
@@ -143,6 +167,14 @@ export class OpenCommandsPopupCommand {
 
 	private bindEvents(): void {
 		this.bindKeydownEvent();
+		this.bindScrollEvent();
+	}
+
+	private bindScrollEvent(): void {
+		$( window ).scroll( (): void => {
+			console.log( 'aaa' );
+			this.popup.toggle( false );
+		} );
 	}
 
 	private bindKeydownEvent(): void {

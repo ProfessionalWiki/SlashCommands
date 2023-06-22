@@ -58,6 +58,7 @@ export class CommandsPopup {
 		const surface = ve.init.target?.getSurface();
 		const editableEl = surface.$element.find( '.ve-ce-rootNode[contenteditable="true"]' );
 		editableEl.off( 'keydown' );
+		$( window ).unbind( 'scroll' );
 
 		CommandsStore.clear( START_FRAGMENT );
 		CommandsStore.clear( REPLACE_FRAGMENT );
