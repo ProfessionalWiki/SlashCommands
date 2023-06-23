@@ -33,7 +33,7 @@ export class CommandsPopup {
 			width: 210
 		}, commandsResolver, fragmentResolver );
 
-		this.setClosingHookHandler();
+		this.setClosingHookHandler().then();
 
 		document.body.appendChild( this.popup.$element[ 0 ] );
 	}
@@ -46,9 +46,9 @@ export class CommandsPopup {
 		return COMMAND_CLASS_NAME;
 	}
 
-	public setClosingHookHandler(): void {
-		this.popup.on( 'closing', (): void => {
-			this.clearContent();
+	public async setClosingHookHandler(): Promise<void> {
+		this.popup.on( 'closing', async (): Promise<void> => {
+			await this.clearContent();
 		} );
 	}
 
@@ -59,6 +59,7 @@ export class CommandsPopup {
 		const editableEl = surface.$element.find( '.ve-ce-rootNode[contenteditable="true"]' );
 		editableEl.off( 'keydown' );
 		$( window ).unbind( 'scroll' );
+		$( document ).off( 'mousemove', '.insert-command' );
 
 		CommandsStore.clear( START_FRAGMENT );
 		CommandsStore.clear( REPLACE_FRAGMENT );
