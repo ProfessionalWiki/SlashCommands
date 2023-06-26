@@ -17,6 +17,12 @@ interface OpenFn extends Function {
 	super: any;
 }
 
+type Position = {
+	top: number|null;
+	bottom: number|null;
+	left: number;
+};
+
 export const OPEN_COMMANDS_POPUP = 'openCommandsPopup';
 
 export class OpenCommandsPopupCommand {
@@ -117,32 +123,40 @@ export class OpenCommandsPopupCommand {
 		this.popup.toggle( true );
 
 		const wrapEl = $( document ).find( '.insert-commands-list-wrap' );
+		const elPosition = this.calculatePosition();
 
-		wrapEl.css( this.calculatePosition() as any );
+		wrapEl.css( {
+			top: elPosition.top ? elPosition.top + 'px' : 'unset',
+			bottom: elPosition.bottom ? elPosition.bottom + 'px' : 'unset',
+			left: elPosition.left + 'px'
+		} );
 		wrapEl.find( '.oo-ui-popupWidget-body' ).scrollTop( 0 );
 	}
 
-	private calculatePosition(): object {
+	private calculatePosition(): Position {
 		const popupHeight = 330;
+		const topRowHeight = 17;
+		const bottomRowHeight = 7;
 		const documentEl = $( document );
 		const windowHeight = $( window ).height();
 		const scrollTop = documentEl.scrollTop();
 		const position = documentEl.find( this.ID ).last().offset();
 
-		const top = position.top - scrollTop;
-		const bottom = windowHeight - top;
+		const top = position.top - scrollTop + topRowHeight;
+		const bottom = windowHeight - top + bottomRowHeight;
 
 		if ( bottom < popupHeight ) {
 			return {
-				top: 'unset',
-				bottom: ( bottom + 7 ) + 'px',
-				left: position.left + 'px'
+				top: null,
+				bottom: bottom,
+				left: position.left
 			};
 		}
 
 		return {
-			top: ( top + 17 ) + 'px',
-			left: position.left + 'px'
+			top: top,
+			bottom: null,
+			left: position.left
 		};
 	}
 
