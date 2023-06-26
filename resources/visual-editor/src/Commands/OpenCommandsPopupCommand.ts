@@ -17,6 +17,12 @@ interface OpenFn extends Function {
 	super: any;
 }
 
+type Position = {
+	top: number|null;
+	bottom: number|null;
+	left: number;
+};
+
 export const OPEN_COMMANDS_POPUP = 'openCommandsPopup';
 
 export class OpenCommandsPopupCommand {
@@ -114,15 +120,46 @@ export class OpenCommandsPopupCommand {
 
 	private showPopup(): void {
 
-		const position = $( document ).find( this.ID ).last().offset();
-
 		this.popup.toggle( true );
 
-		$( document ).find( '.insert-commands-list-wrap' ).css( {
-			top: ( position.top + 17 ) + 'px',
-			left: position.left + 'px'
+		const wrapEl = $( document ).find( '.insert-commands-list-wrap' );
+		const elPosition = this.calculatePosition();
+
+		wrapEl.css( {
+			top: elPosition.top ? elPosition.top + 'px' : 'unset',
+			bottom: elPosition.bottom ? elPosition.bottom + 'px' : 'unset',
+			left: elPosition.left + 'px'
 		} );
+		wrapEl.find( '.oo-ui-popupWidget-body' ).scrollTop( 0 );
 	}
+
+	private calculatePosition(): Position {
+		const popupHeight = 330;
+		const topRowHeight = 17;
+		const bottomRowHeight = 7;
+		const documentEl = $( document );
+		const windowHeight = $( window ).height();
+		const scrollTop = documentEl.scrollTop();
+		const position = documentEl.find( this.ID ).last().offset();
+
+		const top = position.top - scrollTop + topRowHeight;
+		const bottom = windowHeight - top + bottomRowHeight;
+
+		if ( bottom < popupHeight ) {
+			return {
+				top: null,
+				bottom: bottom,
+				left: position.left
+			};
+		}
+
+		return {
+			top: top,
+			bottom: null,
+			left: position.left
+		};
+	}
+
 	private unwrapCommandRunningSymbol(): void {
 		const surfaceModel = this.surface.getModel();
 		const currentFragment = surfaceModel.getFragment();
@@ -143,15 +180,34 @@ export class OpenCommandsPopupCommand {
 
 	private bindEvents(): void {
 		this.bindKeydownEvent();
+		this.bindScrollEvent();
+		this.bindHoverEvent();
+	}
+
+	private bindScrollEvent(): void {
+		$( window ).scroll( (): void => {
+			this.popup.toggle( false );
+		} );
 	}
 
 	private bindKeydownEvent(): void {
 		const editableEl = this.surface.$element.find( '.ve-ce-rootNode[contenteditable="true"]' );
 
-		editableEl/* .off('keydown') */.on( 'keydown', ( e: EventObject ) => {
+		editableEl.on( 'keydown', ( e: EventObject ) => {
 			this.tapCommandsBlock( e );
 			this.closePopup( e );
 			return this.runCommand( e );
+		} );
+	}
+
+	private bindHoverEvent(): void {
+		$( document ).on( 'mousemove', '.insert-command', function (): void {
+			const el = $( this );
+
+			if ( !el.hasClass( 'selected' ) ) {
+				$( '.insert-command' ).removeClass( 'selected' );
+				el.addClass( 'selected' );
+			}
 		} );
 	}
 
@@ -184,16 +240,16 @@ export class OpenCommandsPopupCommand {
 		) {
 			e.preventDefault();
 
-			const focusElem = document.querySelector( '.commands-list>.insert-command.selected' );
+			const focusedElem = document.querySelector( '.commands-list>.insert-command.selected' );
 			const allElems = document.querySelectorAll( '.commands-list>.insert-command' );
 			const tabElements = [ ...allElems ];
 			const tabElementsCount = tabElements.length - 1;
 
-			if ( !tabElements.includes( focusElem ) ) {
+			if ( !tabElements.includes( focusedElem ) ) {
 				return;
 			}
 
-			const focusIndex = tabElements.indexOf( focusElem );
+			const focusIndex = tabElements.indexOf( focusedElem );
 			let elemToFocus;
 
 			if ( e.keyCode === 38 ) { // ArrowUp
@@ -204,8 +260,36 @@ export class OpenCommandsPopupCommand {
 				elemToFocus = tabElements[ focusIndex < tabElementsCount ? focusIndex + 1 : 0 ];
 			}
 
-			focusElem.classList.remove( 'selected' );
+			focusedElem.classList.remove( 'selected' );
 			elemToFocus.classList.add( 'selected' );
+
+			this.addAutoScrolling( elemToFocus );
+		}
+	}
+
+	private addAutoScrolling( element: Element ): void {
+		const parent = element.closest( '.oo-ui-popupWidget-body' ) as HTMLElementTagNameMap['div'];
+		const parentHeight = parent.offsetHeight;
+		const parentRect = parent.getBoundingClientRect();
+		const elemRect = element.getBoundingClientRect();
+		const scrollHeight = parent.scrollHeight;
+
+		// up moving
+		if ( elemRect.top < parentRect.top ) {
+			if ( elemRect.top <= 0 ) {
+				parent.scrollTop = 0;
+			} else {
+				parent.scrollTop = parent.scrollTop - elemRect.height;
+			}
+		}
+
+		// down moving
+		if ( elemRect.bottom >= ( parentRect.top + parentHeight ) ) {
+			if ( elemRect.top >= scrollHeight ) {
+				parent.scrollTop = scrollHeight;
+			} else {
+				parent.scrollTop = parent.scrollTop + elemRect.height;
+			}
 		}
 	}
 
