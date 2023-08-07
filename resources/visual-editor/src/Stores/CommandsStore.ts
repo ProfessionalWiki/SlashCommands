@@ -1,7 +1,6 @@
 export const START_FRAGMENT = 'startFragment';
 export const REPLACE_FRAGMENT = 'replaceFragment';
 export const SEARCH_FRAGMENT = 'searchFragment';
-export const SLASH_COMMANDS_LIST = 'insertCommandsList';
 export const COMMANDS_LIST_LENGHT = 'commandsListLenght';
 export const COUNT_NO_RESULTS_TRYING = 'countNoResultsTrying';
 export const WRAP_BLOCK_ID = 'wrapBlockID';

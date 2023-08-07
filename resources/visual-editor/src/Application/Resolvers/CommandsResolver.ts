@@ -1,4 +1,3 @@
-import { CommandsStore, SLASH_COMMANDS_LIST } from '../../Stores/CommandsStore';
 import { CommandsPopup, NO_RESULTS } from '../../Widgets/CommandsPopup';
 import { FragmentResolver } from './FragmentResolver';
 
@@ -11,32 +10,35 @@ export interface Command {
 export class CommandsResolver {
 
 	public async getCommands( search = '' ): Promise<Command[]> {
-		await this.setCommands( search );
-
-		const insertCommands = await CommandsStore.get( SLASH_COMMANDS_LIST );
-
-		return this.filterCommands( [ ...insertCommands ], search );
+		return this.filterCommands(
+			await this.getCommandsFromVisualEditor( search ),
+			search
+		);
 	}
 
-	private async setCommands( search: string ): Promise<void> {
+	private async getCommandsFromVisualEditor( search: string ): Promise<Command[]> {
 		if ( search.length ) {
-			const commandList = [];
-			const allCommands = this.getAllCommands();
-			for ( const allCommandsKey in allCommands ) {
-				const command = allCommands[ allCommandsKey ];
-				commandList.push( {
-					command: allCommandsKey,
-					icon: this.getCommandIcon( allCommandsKey ),
-					title: command.name,
-					visible: true
-				} );
-			}
-			CommandsStore.set( SLASH_COMMANDS_LIST, commandList );
-			return;
+			return this.getAllCommandsFromVisualEditor();
 		}
 
-		const toolbarCommandList = await this.getCommandsFromTheToolbar();
-		CommandsStore.set( SLASH_COMMANDS_LIST, toolbarCommandList );
+		return await this.getCommandsFromTheToolbar();
+	}
+
+	private getAllCommandsFromVisualEditor(): Command[] {
+		const commandList = [];
+		const allCommands = this.getAllCommands();
+
+		for ( const allCommandsKey in allCommands ) {
+			const command = allCommands[ allCommandsKey ];
+			commandList.push( {
+				command: allCommandsKey,
+				icon: this.getCommandIcon( allCommandsKey ),
+				title: command.name,
+				visible: true
+			} );
+		}
+
+		return commandList;
 	}
 
 	private getCommandsFromTheToolbar(): Promise<Command[]> {
