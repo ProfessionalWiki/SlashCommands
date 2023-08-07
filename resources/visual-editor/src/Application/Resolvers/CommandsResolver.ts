@@ -11,15 +11,32 @@ export interface Command {
 export class CommandsResolver {
 
 	public async getCommands( search = '' ): Promise<Command[]> {
-		let insertCommands = CommandsStore.get( SLASH_COMMANDS_LIST );
+		await this.setCommands( search );
 
-		if ( !insertCommands || insertCommands.lenght ) {
-			CommandsStore.set( SLASH_COMMANDS_LIST, this.getCommandsFromTheToolbar() );
-		}
-
-		insertCommands = await CommandsStore.get( SLASH_COMMANDS_LIST );
+		const insertCommands = await CommandsStore.get( SLASH_COMMANDS_LIST );
 
 		return this.filterCommands( [ ...insertCommands ], search );
+	}
+
+	private async setCommands( search: string ): Promise<void> {
+		if ( search.length ) {
+			const commandList = [];
+			const allCommands = this.getAllCommands();
+			for ( const allCommandsKey in allCommands ) {
+				const command = allCommands[ allCommandsKey ];
+				commandList.push( {
+					command: allCommandsKey,
+					icon: this.getCommandIcon( allCommandsKey ),
+					title: command.name,
+					visible: true
+				} );
+			}
+			CommandsStore.set( SLASH_COMMANDS_LIST, commandList );
+			return;
+		}
+
+		const toolbarCommandList = await this.getCommandsFromTheToolbar();
+		CommandsStore.set( SLASH_COMMANDS_LIST, toolbarCommandList );
 	}
 
 	private getCommandsFromTheToolbar(): Promise<Command[]> {
@@ -108,6 +125,10 @@ export class CommandsResolver {
 
 	private getAllCommands(): object {
 		return ve.ui.commandRegistry.registry;
+	}
+
+	private getCommandIcon( commandName: string ): string {
+		return ve.ui.contextItemFactory.registry?.[ commandName ]?.static?.icon ?? 'noIcon';
 	}
 
 	public focusFirstCommand( popup: OO.ui.PopupWidget ): void {

@@ -16,6 +16,7 @@ declare global {
 		namespace ui {
 			const Surface: any;
 			const commandRegistry: any;
+			const contextItemFactory: any;
 			const sequenceRegistry: any;
 			const Command: any;
 			const Sequence: any;
