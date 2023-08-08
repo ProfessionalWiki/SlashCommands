@@ -8,8 +8,8 @@ export interface Command {
 }
 
 interface Config {
-	Predefined: Command[];
-	Additional: Command[];
+	Predefined: string[];
+	Available: Command[];
 }
 
 export class CommandsResolver {
@@ -23,7 +23,7 @@ export class CommandsResolver {
 
 	private getConfiguredCommands( search: string ): Command[] {
 		if ( search.length ) {
-			return this.getCombinedCommands();
+			return this.getAvailableCommands();
 		}
 
 		return this.getPredefinedCommands();
@@ -31,15 +31,16 @@ export class CommandsResolver {
 
 	private getPredefinedCommands(): Command[] {
 		const config = mw.config.get( 'SlashCommands' ) as Config;
-		return config?.Predefined ?? [];
+		const predefinedCommandsNames = config?.Predefined ?? [];
+		const availableCommands = config?.Available ?? [];
+
+		return availableCommands
+			.filter( ( command: Command ) => predefinedCommandsNames.includes( command.command ) );
 	}
 
-	private getCombinedCommands(): Command[] {
+	private getAvailableCommands(): Command[] {
 		const config = mw.config.get( 'SlashCommands' ) as Config;
-		const predefinedCommands = this.getPredefinedCommands();
-		const additionalCommands = config?.Additional ?? [];
-
-		return [ ...predefinedCommands, ...additionalCommands ];
+		return config?.Available ?? [];
 	}
 
 	public filterCommands( insertCommands: Command[], search: string ): Command[] {
