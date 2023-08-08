@@ -1,4 +1,3 @@
-import { CommandsStore, SLASH_COMMANDS_LIST } from '../../Stores/CommandsStore';
 import { CommandsPopup, NO_RESULTS } from '../../Widgets/CommandsPopup';
 import { FragmentResolver } from './FragmentResolver';
 
@@ -6,52 +5,55 @@ export interface Command {
 	command: string;
 	icon: string;
 	title: string;
-	visible: boolean;
 }
+
+interface Config {
+	Predefined: Command[];
+	Additional: Command[];
+}
+
 export class CommandsResolver {
 
-	public async getCommands( search = '' ): Promise<Command[]> {
-		let insertCommands = CommandsStore.get( SLASH_COMMANDS_LIST );
-
-		if ( !insertCommands || insertCommands.lenght ) {
-			CommandsStore.set( SLASH_COMMANDS_LIST, this.getCommandsFromTheToolbar() );
-		}
-
-		insertCommands = await CommandsStore.get( SLASH_COMMANDS_LIST );
-
-		return this.filterCommands( [ ...insertCommands ], search );
+	public getCommands( search = '' ): Command[] {
+		return this.filterCommands(
+			this.getConfiguredCommands( search ),
+			search
+		);
 	}
 
-	private getCommandsFromTheToolbar(): Promise<Command[]> {
-		return new Promise( ( resolve ) => {
-			setTimeout( () => {
-				const commandsList = [];
+	private getConfiguredCommands( search: string ): Command[] {
+		if ( search.length ) {
+			return this.getCombinedCommands();
+		}
 
-				for ( const groupName of [ 'style', 'insert', 'structure', 'link' ] ) {
-					const tools = ve.init.target.toolbar.groupsByName[ groupName ].tools;
+		return this.getPredefinedCommands();
+	}
 
-					Object.keys( tools ).forEach( function ( key ): void {
-						const item = tools[ key ];
-						if ( item.disabled === false ) {
-							commandsList.push( {
-								command: key,
-								icon: item.icon,
-								title: item.title,
-								visible: true
-							} );
-						}
-					} );
-				}
+	private getPredefinedCommands(): Command[] {
+		const config = mw.config.get( 'SlashCommands' ) as Config;
+		return config?.Predefined ?? [];
+	}
 
-				resolve( commandsList );
-			} );
-		} );
+	private getCombinedCommands(): Command[] {
+		const config = mw.config.get( 'SlashCommands' ) as Config;
+		const predefinedCommands = this.getPredefinedCommands();
+		const additionalCommands = config?.Additional ?? [];
+
+		return [ ...predefinedCommands, ...additionalCommands ];
 	}
 
 	public filterCommands( insertCommands: Command[], search: string ): Command[] {
 		if ( search ) {
 			insertCommands = insertCommands.filter( ( item ) => {
 				return item.title.toLowerCase().includes( search.toLowerCase() );
+			} ).sort( ( a, b ): number => {
+				if ( a.command.startsWith( search ) && b.command.startsWith( search ) ) {
+					return 0;
+				}
+				if ( b.command.startsWith( search ) ) {
+					return 1;
+				}
+				return -1;
 			} );
 		}
 
