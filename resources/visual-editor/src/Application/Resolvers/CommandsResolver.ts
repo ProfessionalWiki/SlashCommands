@@ -32,7 +32,7 @@ export class CommandsResolver {
 	private getPredefinedCommands(): Command[] {
 		const config = mw.config.get( 'SlashCommands' ) as Config;
 		const predefinedCommandsNames = config?.Predefined ?? [];
-		const availableCommands = config?.Available ?? [];
+		const availableCommands = this.getAvailableCommands();
 
 		return availableCommands
 			.filter( ( command: Command ) => predefinedCommandsNames.includes( command.command ) );
@@ -40,7 +40,22 @@ export class CommandsResolver {
 
 	private getAvailableCommands(): Command[] {
 		const config = mw.config.get( 'SlashCommands' ) as Config;
-		return config?.Available ?? [];
+		const availableCommands = config?.Available ?? [];
+		const commandsRegistry = this.getAllCommands();
+
+		const commands = [];
+		for ( const availableCommand of availableCommands ) {
+			if (
+				Object.prototype.hasOwnProperty.call( commandsRegistry, availableCommand.command )
+			) {
+				availableCommand.title = this.getCommandLabel( availableCommand.command );
+				const icon = this.getCommandIcon( availableCommand.command );
+				availableCommand.icon = icon || availableCommand.icon;
+				commands.push( availableCommand );
+			}
+		}
+
+		return commands;
 	}
 
 	public filterCommands( insertCommands: Command[], search: string ): Command[] {
@@ -113,8 +128,13 @@ export class CommandsResolver {
 		return ve.ui.commandRegistry.registry;
 	}
 
-	private getCommandIcon( commandName: string ): string {
-		return ve.ui.contextItemFactory.registry?.[ commandName ]?.static?.icon ?? 'noIcon';
+	private getCommandLabel( commandName: string ): string {
+		return ve.ui.commandHelpRegistry.registry?.[ commandName ]?.label() ??
+			( commandName.charAt( 0 ).toUpperCase() + commandName.slice( 1 ) );
+	}
+
+	private getCommandIcon( commandName: string ): string|null {
+		return ve.ui.contextItemFactory.registry?.[ commandName ]?.static?.icon ?? null;
 	}
 
 	public focusFirstCommand( popup: OO.ui.PopupWidget ): void {

@@ -66,85 +66,23 @@
 		"Commands": {
 			"value": {
 				"Available": [
-					{
-						"command": "bold",
-						"title": "Bold",
-						"icon": "bold"
-					},
-					{
-						"command": "italic",
-						"title": "Italic",
-						"icon": "italic"
-					},
-					{
-						"command": "underline",
-						"title": "Underline",
-						"icon": "underline"
-					},
-					{
-						"command": "strikethrough",
-						"title": "Strikethrough",
-						"icon": "strikethrough"
-					},
-					{
-						"command": "big",
-						"title": "Big",
-						"icon": "bigger"
-					},
-					{
-						"command": "small",
-						"title": "Small",
-						"icon": "smaller"
-					},
-					{
-						"command": "code",
-						"title": "Computer code",
-						"icon": "code"
-					},
-					{
-						"command": "heading1",
-						"title": "Heading 1"
-					},
-					{
-						"command": "heading2",
-						"title": "Heading 2"
-					},
-					{
-						"command": "heading3",
-						"title": "Heading 3"
-					},
-					{
-						"command": "heading4",
-						"title": "Heading 4"
-					},
-					{
-						"command": "heading5",
-						"title": "Heading 5"
-					},
-					{
-						"command": "heading6",
-						"title": "Heading 6"
-					},
-					{
-						"command": "table",
-						"title": "Table",
-						"icon": "table"
-					},
-					{
-						"command": "gallery",
-						"title": "Image gallery",
-						"icon": "imageGallery"
-					},
-					{
-						"command": "comment",
-						"title": "Comment",
-						"icon": "notice"
-					},
-					{
-						"command": "link",
-						"title": "Link",
-						"icon": "link"
-					}
+					{ "command": "bold", "icon": "bold"},
+					{ "command": "italic", "icon": "italic"},
+					{ "command": "underline", "icon": "underline"},
+					{ "command": "strikethrough", "icon": "strikethrough" },
+					{ "command": "big", "icon": "bigger" },
+					{ "command": "small", "icon": "smaller" },
+					{ "command": "code", "icon": "code"},
+					{ "command": "heading1" },
+					{ "command": "heading2" },
+					{ "command": "heading3" },
+					{ "command": "heading4" },
+					{ "command": "heading5" },
+					{ "command": "heading6" },
+					{ "command": "table", "icon": "table" },
+					{ "command": "gallery", "icon": "imageGallery" },
+					{ "command": "comment", "icon": "notice" },
+					{ "command": "link", "icon": "link" }
 				],
 				"Predefined" : [
 					"bold", "italic", "underline", "strikethrough", "big", "small", "code"

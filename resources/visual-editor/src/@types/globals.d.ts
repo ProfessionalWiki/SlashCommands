@@ -18,6 +18,7 @@ declare global {
 			const commandRegistry: any;
 			const contextItemFactory: any;
 			const sequenceRegistry: any;
+			const commandHelpRegistry: any;
 			const Command: any;
 			const Sequence: any;
 			const Trigger: any;
