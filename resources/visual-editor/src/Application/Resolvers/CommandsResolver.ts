@@ -5,72 +5,55 @@ export interface Command {
 	command: string;
 	icon: string;
 	title: string;
-	visible: boolean;
 }
+
+interface Config {
+	Predefined: Command[];
+	Additional: Command[];
+}
+
 export class CommandsResolver {
 
-	public async getCommands( search = '' ): Promise<Command[]> {
+	public getCommands( search = '' ): Command[] {
 		return this.filterCommands(
-			await this.getCommandsFromVisualEditor( search ),
+			this.getConfiguredCommands( search ),
 			search
 		);
 	}
 
-	private async getCommandsFromVisualEditor( search: string ): Promise<Command[]> {
+	private getConfiguredCommands( search: string ): Command[] {
 		if ( search.length ) {
-			return this.getAllCommandsFromVisualEditor();
+			return this.getCombinedCommands();
 		}
 
-		return await this.getCommandsFromTheToolbar();
+		return this.getPredefinedCommands();
 	}
 
-	private getAllCommandsFromVisualEditor(): Command[] {
-		const commandList = [];
-		const allCommands = this.getAllCommands();
-
-		for ( const allCommandsKey in allCommands ) {
-			const command = allCommands[ allCommandsKey ];
-			commandList.push( {
-				command: allCommandsKey,
-				icon: this.getCommandIcon( allCommandsKey ),
-				title: command.name,
-				visible: true
-			} );
-		}
-
-		return commandList;
+	private getPredefinedCommands(): Command[] {
+		const config = mw.config.get( 'SlashCommands' ) as Config;
+		return config?.Predefined ?? [];
 	}
 
-	private getCommandsFromTheToolbar(): Promise<Command[]> {
-		return new Promise( ( resolve ) => {
-			setTimeout( () => {
-				const commandsList = [];
+	private getCombinedCommands(): Command[] {
+		const config = mw.config.get( 'SlashCommands' ) as Config;
+		const predefinedCommands = this.getPredefinedCommands();
+		const additionalCommands = config?.Additional ?? [];
 
-				for ( const groupName of [ 'style', 'insert', 'structure' ] ) {
-					const tools = ve.init.target.toolbar.groupsByName[ groupName ].tools;
-
-					Object.keys( tools ).forEach( function ( key ): void {
-						const item = tools[ key ];
-						if ( item.disabled === false ) {
-							commandsList.push( {
-								command: key,
-								icon: item.icon,
-								title: item.title,
-								visible: true
-							} );
-						}
-					} );
-				}
-
-				resolve( commandsList );
-			} );
-		} );
+		return [ ...predefinedCommands, ...additionalCommands ];
 	}
 
 	public filterCommands( insertCommands: Command[], search: string ): Command[] {
 		if ( search ) {
 			insertCommands = insertCommands.filter( ( item ) => {
 				return item.title.toLowerCase().includes( search.toLowerCase() );
+			} ).sort( ( a, b ): number => {
+				if ( a.command.startsWith( search ) && b.command.startsWith( search ) ) {
+					return 0;
+				}
+				if ( b.command.startsWith( search ) ) {
+					return 1;
+				}
+				return -1;
 			} );
 		}
 

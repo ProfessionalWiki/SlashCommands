@@ -69,8 +69,8 @@ export class CommandsPopup {
 		CommandsStore.set( COUNT_NO_RESULTS_TRYING, 0 );
 	}
 
-	public async setContent(): Promise<void> {
-		this.setBodyHtml( await this.commandsResolver.getCommands() );
+	public setContent(): void {
+		this.setBodyHtml( this.commandsResolver.getCommands() );
 	}
 
 	private setBodyHtml( commandsList: Command[] ): void {
@@ -78,8 +78,8 @@ export class CommandsPopup {
 		this.popup.$body.find( '.commands-list' ).html( content );
 	}
 
-	public async updateContent( search: string ): Promise<void> {
-		this.updateBodyHtml( await this.commandsResolver.getCommands( search ) );
+	public updateContent( search: string ): void {
+		this.updateBodyHtml( this.commandsResolver.getCommands( search ) );
 	}
 
 	private updateBodyHtml( commandsList: Command[] ): void {
@@ -101,8 +101,8 @@ export class CommandsPopup {
 	public getCommandElTemplate( commandsList: Command[] ): string {
 		let content = '';
 		commandsList.forEach( function ( commandData: Command, index ): void {
-			content += `<span class="${COMMAND_CLASS_NAME} ${!commandData.visible ? 'hidden' : 'active'}" tabindex="${index + 1}" role="button" data-command="${commandData.command}">
-					<span class="oo-ui-iconElement-icon oo-ui-icon-${commandData.icon}"></span>
+			content += `<span class="${COMMAND_CLASS_NAME}" tabindex="${index + 1}" role="button" data-command="${commandData.command}">
+					<span class="oo-ui-iconElement-icon oo-ui-icon-${commandData.icon || 'noIcon'}"></span>
 					<span class="oo-ui-tool-title">${commandData.title}</span>
 				</span>`;
 		} );

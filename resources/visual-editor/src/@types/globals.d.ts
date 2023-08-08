@@ -11,6 +11,8 @@ declare global {
 		mw: MediaWiki;
 	}
 
+	const $wgAaa: any;
+
 	// TODO: no types for VisualEditor
 	namespace ve {
 		namespace ui {
@@ -38,6 +40,10 @@ declare global {
 		namespace ce {
 			const annotationFactory: any;
 			const TextStyleAnnotation: any;
+		}
+
+		namespace mw {
+			const config: any;
 		}
 		const Range: any;
 		const init: any;
