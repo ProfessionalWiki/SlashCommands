@@ -11,8 +11,6 @@ declare global {
 		mw: MediaWiki;
 	}
 
-	const $wgAaa: any;
-
 	// TODO: no types for VisualEditor
 	namespace ve {
 		namespace ui {
