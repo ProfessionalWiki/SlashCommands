@@ -27,7 +27,7 @@ export class CommandsResolver {
 			setTimeout( () => {
 				const commandsList = [];
 
-				for ( const groupName of [ 'style', 'insert', 'structure' ] ) {
+				for ( const groupName of [ 'style', 'insert', 'structure', 'link' ] ) {
 					const tools = ve.init.target.toolbar.groupsByName[ groupName ].tools;
 
 					Object.keys( tools ).forEach( function ( key ): void {
