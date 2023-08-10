@@ -7,7 +7,7 @@ import { CommandManager } from '@/Commands/CommandManager';
 
 ve.slashCommands = {
 	CommandManager: new CommandManager()
-}
+};
 
 /**
  * Setup commands list popup

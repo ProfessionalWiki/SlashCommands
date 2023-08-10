@@ -5,14 +5,12 @@
 /* eslint-enable */
 
 import type { MediaWiki } from './mediawiki/MwWindow';
-import type { CommandPlugin, CommandPluginManager } from "@/Commands/CommandManager";
+import type { Command as CommandItem, ICommandManager } from '@/Commands/CommandManager';
 
 declare global {
 	interface Window {
 		mw: MediaWiki;
 	}
-
-	const $wgAaa: any;
 
 	// TODO: no types for VisualEditor
 	namespace ve {
@@ -45,7 +43,7 @@ declare global {
 		}
 
 		namespace slashCommands {
-			let CommandManager: CommandPluginManager<CommandPlugin>;
+			let CommandManager: ICommandManager<CommandItem>;
 		}
 
 		const Range: any;

@@ -5,7 +5,8 @@ import {
 } from '../Stores/CommandsStore';
 import { CommandsPopupFactory, CommandsPopupWidget } from './Factories/CommandsPopupFactory';
 import { FragmentResolver } from '../Application/Resolvers/FragmentResolver';
-import { Command, CommandsResolver } from '../Application/Resolvers/CommandsResolver';
+import { CommandsResolver } from '../Application/Resolvers/CommandsResolver';
+import { Command } from '@/Commands/CommandManager';
 
 const COMMAND_CLASS_NAME = 'insert-command';
 export const NO_RESULTS = 'no-results';
@@ -73,7 +74,7 @@ export class CommandsPopup {
 		this.setBodyHtml( this.commandsResolver.getCommands() );
 	}
 
-	private setBodyHtml( commandsList: Command[] ): void {
+	private setBodyHtml( commandsList: Map<string, Command> ): void {
 		const content = this.getCommandElTemplate( commandsList );
 		this.popup.$body.find( '.commands-list' ).html( content );
 	}
@@ -82,10 +83,10 @@ export class CommandsPopup {
 		this.updateBodyHtml( this.commandsResolver.getCommands( search ) );
 	}
 
-	private updateBodyHtml( commandsList: Command[] ): void {
+	private updateBodyHtml( commandsList: Map<string, Command> ): void {
 		let content = '';
 
-		if ( !commandsList.length ) {
+		if ( !commandsList.size ) {
 			content = `<span class="${this.commandClassName}" role="button" data-command="${NO_RESULTS}">No results</span>`;
 			const countNoResultsTrying = CommandsStore.get( COUNT_NO_RESULTS_TRYING );
 			CommandsStore.set( COUNT_NO_RESULTS_TRYING, ( countNoResultsTrying + 1 ) );
@@ -93,18 +94,20 @@ export class CommandsPopup {
 			content = this.getCommandElTemplate( commandsList );
 		}
 
-		CommandsStore.set( COMMANDS_LIST_LENGHT, commandsList.length );
+		CommandsStore.set( COMMANDS_LIST_LENGHT, commandsList.size );
 
 		this.popup.$body.find( '.commands-list' ).html( content );
 	}
 
-	public getCommandElTemplate( commandsList: Command[] ): string {
+	public getCommandElTemplate( commandsList: Map<string, Command> ): string {
 		let content = '';
-		commandsList.forEach( function ( commandData: Command, index ): void {
-			content += `<span class="${COMMAND_CLASS_NAME}" tabindex="${index + 1}" role="button" data-command="${commandData.command}">
+		let index = 0;
+		commandsList.forEach( function ( commandData: Command ): void {
+			content += `<span class="${COMMAND_CLASS_NAME}" tabindex="${index}" role="button" data-command="${commandData.name}">
 					<span class="oo-ui-iconElement-icon oo-ui-icon-${commandData.icon || 'noIcon'}"></span>
-					<span class="oo-ui-tool-title">${commandData.title}</span>
+					<span class="oo-ui-tool-title">${commandData.label}</span>
 				</span>`;
+			index++;
 		} );
 
 		return content;

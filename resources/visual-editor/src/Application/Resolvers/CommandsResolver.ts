@@ -1,63 +1,41 @@
 import { CommandsPopup, NO_RESULTS } from '../../Widgets/CommandsPopup';
 import { FragmentResolver } from './FragmentResolver';
-
-export interface Command {
-	command: string;
-	icon: string;
-	title: string;
-}
-
-interface Config {
-	Predefined: Command[];
-	Additional: Command[];
-}
+import { Command } from '@/Commands/CommandManager';
 
 export class CommandsResolver {
 
-	public getCommands( search = '' ): Command[] {
-		return this.filterCommands(
-			this.getConfiguredCommands( search ),
-			search
-		);
-	}
+	public getCommands( search = '' ): Map<string, Command> {
+		const commandManager = ve.slashCommands.CommandManager;
 
-	private getConfiguredCommands( search: string ): Command[] {
 		if ( search.length ) {
-			return this.getCombinedCommands();
+			return this.filterCommands( commandManager.getCommandList(), search.toLowerCase() );
 		}
 
-		return this.getPredefinedCommands();
+		return commandManager.getInitialCommandList();
 	}
 
-	private getPredefinedCommands(): Command[] {
-		const config = mw.config.get( 'SlashCommands' ) as Config;
-		return config?.Predefined ?? [];
-	}
-
-	private getCombinedCommands(): Command[] {
-		const config = mw.config.get( 'SlashCommands' ) as Config;
-		const predefinedCommands = this.getPredefinedCommands();
-		const additionalCommands = config?.Additional ?? [];
-
-		return [ ...predefinedCommands, ...additionalCommands ];
-	}
-
-	public filterCommands( insertCommands: Command[], search: string ): Command[] {
-		if ( search ) {
-			insertCommands = insertCommands.filter( ( item ) => {
-				return item.title.toLowerCase().includes( search.toLowerCase() );
-			} ).sort( ( a, b ): number => {
-				if ( a.command.startsWith( search ) && b.command.startsWith( search ) ) {
-					return 0;
-				}
-				if ( b.command.startsWith( search ) ) {
-					return 1;
-				}
-				return -1;
-			} );
-		}
-
-		return insertCommands;
+	private filterCommands(
+		commandList: Map<string, Command>,
+		search: string
+	): Map<string, Command> {
+		return new Map(
+			[ ...commandList ]
+				.filter( ( [ , command ] ) => {
+					return command.label.toLowerCase().includes( search );
+				} )
+				.sort( ( [ , commandA ], [ , commandB ] ): number => {
+					if (
+						commandA.label.toLowerCase().startsWith( search ) &&
+						commandB.label.toLowerCase().startsWith( search )
+					) {
+						return 0;
+					}
+					if ( commandB.label.toLowerCase().startsWith( search ) ) {
+						return 1;
+					}
+					return -1;
+				} )
+		);
 	}
 
 	public executeCommandWithElement(

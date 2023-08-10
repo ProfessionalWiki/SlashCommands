@@ -44,111 +44,11 @@
 		}
 	},
 
-	"AutoloadNamespaces": {
-		"ProfessionalWiki\\SlashCommands\\": "src/"
-	},
-
-	"Hooks": {
-		"MakeGlobalVariablesScript": "ProfessionalWiki\\SlashCommands\\EntryPoints\\MediaWikiHooks::onMakeGlobalVariablesScript"
-	},
-
 	"attributes": {
 		"VisualEditor": {
 			"PluginModules": [
 				"ext.slash-commands.visual-editor"
 			]
-		}
-	},
-
-	"config_prefix": "sc",
-
-	"config": {
-		"Commands": {
-			"value": {
-				"Predefined": [
-					{
-						"command": "bold",
-						"title": "Bold",
-						"icon": "bold"
-					},
-					{
-						"command": "italic",
-						"title": "Italic",
-						"icon": "italic"
-					},
-					{
-						"command": "underline",
-						"title": "Underline",
-						"icon": "underline"
-					},
-					{
-						"command": "strikethrough",
-						"title": "Strikethrough",
-						"icon": "strikethrough"
-					},
-					{
-						"command": "big",
-						"title": "Big",
-						"icon": "bigger"
-					},
-					{
-						"command": "small",
-						"title": "Small",
-						"icon": "smaller"
-					},
-					{
-						"command": "code",
-						"title": "Computer code",
-						"icon": "code"
-					}
-				],
-				"Additional": [
-					{
-						"command": "heading1",
-						"title": "Heading 1"
-					},
-					{
-						"command": "heading2",
-						"title": "Heading 2"
-					},
-					{
-						"command": "heading3",
-						"title": "Heading 3"
-					},
-					{
-						"command": "heading4",
-						"title": "Heading 4"
-					},
-					{
-						"command": "heading5",
-						"title": "Heading 5"
-					},
-					{
-						"command": "heading6",
-						"title": "Heading 6"
-					},
-					{
-						"command": "table",
-						"title": "Table",
-						"icon": "table"
-					},
-					{
-						"command": "gallery",
-						"title": "Image gallery",
-						"icon": "imageGallery"
-					},
-					{
-						"command": "comment",
-						"title": "Comment",
-						"icon": "notice"
-					},
-					{
-						"command": "link",
-						"title": "Link",
-						"icon": "link"
-					}
-				]
-			}
 		}
 	},
 

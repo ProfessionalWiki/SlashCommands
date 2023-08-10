@@ -1,5 +1,5 @@
 import { defineConfig } from 'vite';
-import * as path from "path";
+import * as path from 'path';
 
 export default defineConfig( {
 	build: {
@@ -13,7 +13,7 @@ export default defineConfig( {
 	},
 	resolve: {
 		alias: {
-			'@': path.resolve(__dirname, './src')
-		},
-	},
+			'@': path.resolve( __dirname, './src' )
+		}
+	}
 } );
