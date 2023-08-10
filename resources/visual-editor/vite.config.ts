@@ -1,4 +1,5 @@
 import { defineConfig } from 'vite';
+import * as path from "path";
 
 export default defineConfig( {
 	build: {
@@ -9,5 +10,10 @@ export default defineConfig( {
 				assetFileNames: 'assets/[name].[ext]'
 			}
 		}
-	}
+	},
+	resolve: {
+		alias: {
+			'@': path.resolve(__dirname, './src')
+		},
+	},
 } );

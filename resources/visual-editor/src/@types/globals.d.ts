@@ -5,6 +5,7 @@
 /* eslint-enable */
 
 import type { MediaWiki } from './mediawiki/MwWindow';
+import type { CommandPlugin, CommandPluginManager } from "@/Commands/CommandManager";
 
 declare global {
 	interface Window {
@@ -17,6 +18,8 @@ declare global {
 			const Surface: any;
 			const commandRegistry: any;
 			const sequenceRegistry: any;
+			const contextItemFactory: any;
+			const commandHelpRegistry: any;
 			const Command: any;
 			const Sequence: any;
 			const Trigger: any;
@@ -38,6 +41,11 @@ declare global {
 			const annotationFactory: any;
 			const TextStyleAnnotation: any;
 		}
+
+		namespace slashCommands {
+			let CommandManager: CommandPluginManager<CommandPlugin>;
+		}
+
 		const Range: any;
 		const init: any;
 	}
