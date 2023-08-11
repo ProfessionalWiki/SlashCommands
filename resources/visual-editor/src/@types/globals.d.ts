@@ -5,7 +5,6 @@
 /* eslint-enable */
 
 import type { MediaWiki } from './mediawiki/MwWindow';
-import type { Command as CommandItem, ICommandManager } from '@/Commands/CommandManager';
 
 declare global {
 	interface Window {
@@ -40,10 +39,6 @@ declare global {
 		namespace ce {
 			const annotationFactory: any;
 			const TextStyleAnnotation: any;
-		}
-
-		namespace slashCommands {
-			let CommandManager: ICommandManager<CommandItem>;
 		}
 
 		const Range: any;

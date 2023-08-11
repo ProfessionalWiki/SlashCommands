@@ -3,17 +3,15 @@ import { CommandsController } from './Application/CommandsController';
 import { CommandsPopup } from './Widgets/CommandsPopup';
 import { FragmentResolver } from './Application/Resolvers/FragmentResolver';
 import { CommandsResolver } from './Application/Resolvers/CommandsResolver';
-import { CommandManager } from '@/Commands/CommandManager';
-
-ve.slashCommands = {
-	CommandManager: new CommandManager()
-};
+import { CommandRegistry } from '@/Commands/CommandRegistry';
 
 /**
  * Setup commands list popup
  */
 const fragmentResolver = new FragmentResolver();
-const commandsResolver = new CommandsResolver();
+const commandsResolver = new CommandsResolver(
+	new CommandRegistry()
+);
 const popupObject = new CommandsPopup( fragmentResolver, commandsResolver );
 ( new CommandsController( popupObject, fragmentResolver, commandsResolver ) ).setUp();
 

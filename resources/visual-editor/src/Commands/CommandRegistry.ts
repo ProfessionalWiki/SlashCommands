@@ -4,15 +4,12 @@ export interface Command {
 	label?: string;
 }
 
-export interface ICommandManager<P> {
-	registerCommand( command: P ): void;
-	getCommand( name: string ): P;
-	getCommandList(): Map<string, P>;
-	getInitialCommandList(): Map<string, P>;
-	deleteCommand( name: string ): void;
+export interface CommandRegistryInterface {
+	getCommandList(): Map<string, Command>;
+	getInitialCommandList(): Map<string, Command>;
 }
 
-export class CommandManager implements ICommandManager<Command> {
+export class CommandRegistry {
 	private readonly commandList: Map<string, Command>;
 	private readonly initialCommands = [
 		'bold', 'italic', 'underline', 'strikethrough', 'big', 'small', 'code',
@@ -33,7 +30,7 @@ export class CommandManager implements ICommandManager<Command> {
 
 	public constructor() {
 		if ( !ve?.ui?.commandRegistry?.registry ) {
-			throw new Error( 'CommandManager is not available in this extension' );
+			throw new Error( 'CommandRegistry is not available in this extension, see "ve.ui.commandRegistry" for details' );
 		}
 
 		this.commandList = new Map();
@@ -53,12 +50,12 @@ export class CommandManager implements ICommandManager<Command> {
 		return this.commandList.has( name );
 	}
 
-	private commandGloballyRegistered( name: string ): boolean {
-		return Object.prototype.hasOwnProperty.call( ve.ui.commandRegistry.registry, name );
+	private commandExcluded( name: string ): boolean {
+		return this.excludedCommands.includes( name )
 	}
 
 	private addCommand( command: Command ): void {
-		if ( !this.excludedCommands.includes( command.name ) ) {
+		if ( !this.commandExists(command.name) && !this.commandExcluded(command.name) ) {
 			this.commandList.set( command.name, {
 				name: command.name,
 				icon: command.icon ?? this.getCommandIcon( command.name ),
@@ -80,31 +77,6 @@ export class CommandManager implements ICommandManager<Command> {
 			( commandName.charAt( 0 ).toUpperCase() + commandName.slice( 1 ) );
 	}
 
-	public registerCommand( command: Command ): void {
-		if ( !command.name ) {
-			throw new Error( 'The command name is required' );
-		}
-
-		if ( this.commandExists( command.name ) ) {
-			throw new Error( `The command with name "${command.name}" already exists` );
-		}
-
-		if ( !this.commandGloballyRegistered( command.name ) ) {
-			throw new Error( `The command with name "${command.name}" is not globally registered, see "ve.ui.commandRegistry" for details` );
-		}
-
-		this.addCommand( command );
-	}
-
-	public getCommand( name: string ): Command {
-		const command = this.commandList.get( name );
-		if ( !command ) {
-			throw new Error( `The command with name "${name}" does not exist` );
-		}
-
-		return command;
-	}
-
 	public getCommandList(): Map<string, Command> {
 		return this.commandList;
 	}
@@ -113,14 +85,5 @@ export class CommandManager implements ICommandManager<Command> {
 		return new Map(
 			[ ...this.commandList ].filter( ( [ name ] ) => this.initialCommands.includes( name ) )
 		);
-	}
-
-	public deleteCommand( name: string ): void {
-		const command = this.commandList.get( name );
-		if ( !command ) {
-			throw new Error( `The command with name "${name}" does not exist` );
-		}
-
-		this.commandList.delete( name );
 	}
 }

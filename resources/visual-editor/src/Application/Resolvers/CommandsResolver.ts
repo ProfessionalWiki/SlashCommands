@@ -1,17 +1,18 @@
 import { CommandsPopup, NO_RESULTS } from '../../Widgets/CommandsPopup';
 import { FragmentResolver } from './FragmentResolver';
-import { Command } from '@/Commands/CommandManager';
+import type { CommandRegistryInterface, Command } from "@/Commands/CommandRegistry";
 
 export class CommandsResolver {
 
-	public getCommands( search = '' ): Map<string, Command> {
-		const commandManager = ve.slashCommands.CommandManager;
+	public constructor( private readonly commandRegistry: CommandRegistryInterface) {
+	}
 
+	public getCommands( search = '' ): Map<string, Command> {
 		if ( search.length ) {
-			return this.filterCommands( commandManager.getCommandList(), search.toLowerCase() );
+			return this.filterCommands( this.commandRegistry.getCommandList(), search.toLowerCase() );
 		}
 
-		return commandManager.getInitialCommandList();
+		return this.commandRegistry.getInitialCommandList();
 	}
 
 	private filterCommands(

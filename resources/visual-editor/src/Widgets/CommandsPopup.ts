@@ -6,7 +6,7 @@ import {
 import { CommandsPopupFactory, CommandsPopupWidget } from './Factories/CommandsPopupFactory';
 import { FragmentResolver } from '../Application/Resolvers/FragmentResolver';
 import { CommandsResolver } from '../Application/Resolvers/CommandsResolver';
-import { Command } from '@/Commands/CommandManager';
+import { Command } from '@/Commands/CommandRegistry';
 
 const COMMAND_CLASS_NAME = 'insert-command';
 export const NO_RESULTS = 'no-results';
