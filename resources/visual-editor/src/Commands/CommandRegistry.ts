@@ -51,11 +51,11 @@ export class CommandRegistry {
 	}
 
 	private commandExcluded( name: string ): boolean {
-		return this.excludedCommands.includes( name )
+		return this.excludedCommands.includes( name );
 	}
 
 	private addCommand( command: Command ): void {
-		if ( !this.commandExists(command.name) && !this.commandExcluded(command.name) ) {
+		if ( !this.commandExists( command.name ) && !this.commandExcluded( command.name ) ) {
 			this.commandList.set( command.name, {
 				name: command.name,
 				icon: command.icon ?? this.getCommandIcon( command.name ),

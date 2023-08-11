@@ -1,15 +1,18 @@
 import { CommandsPopup, NO_RESULTS } from '../../Widgets/CommandsPopup';
 import { FragmentResolver } from './FragmentResolver';
-import type { CommandRegistryInterface, Command } from "@/Commands/CommandRegistry";
+import type { CommandRegistryInterface, Command } from '@/Commands/CommandRegistry';
 
 export class CommandsResolver {
 
-	public constructor( private readonly commandRegistry: CommandRegistryInterface) {
+	public constructor( private readonly commandRegistry: CommandRegistryInterface ) {
 	}
 
 	public getCommands( search = '' ): Map<string, Command> {
 		if ( search.length ) {
-			return this.filterCommands( this.commandRegistry.getCommandList(), search.toLowerCase() );
+			return this.filterCommands(
+				this.commandRegistry.getCommandList(),
+				search.toLowerCase()
+			);
 		}
 
 		return this.commandRegistry.getInitialCommandList();
