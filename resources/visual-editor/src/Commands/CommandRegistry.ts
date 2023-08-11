@@ -48,10 +48,6 @@ export class CommandRegistry {
 		}
 	}
 
-	private commandExists( name: string ): boolean {
-		return this.commandList.has( name );
-	}
-
 	private commandExcluded( name: string ): boolean {
 		return this.excludedCommands.includes( name );
 	}
@@ -61,7 +57,7 @@ export class CommandRegistry {
 	}
 
 	private addCommand( command: Command ): void {
-		if ( !this.commandExists( command.name ) && !this.commandExcluded( command.name ) ) {
+		if ( !this.commandExcluded( command.name ) ) {
 			this.commandList.set( command.name, {
 				name: command.name,
 				icon: command.icon ?? this.getCommandIcon( command.name ),
@@ -79,17 +75,16 @@ export class CommandRegistry {
 	}
 
 	private getCommandLabel( commandName: string ): string {
-		return ve.ui?.toolFactory?.registry?.[ commandName ]?.static?.title() ??
-			( commandName.charAt( 0 ).toUpperCase() + commandName.slice( 1 ) );
+		let label;
+		try {
+			label = ve.ui?.toolFactory?.registry?.[ commandName ]?.static?.title();
+		} catch ( e ) {}
+		return label ?? commandName.charAt( 0 ).toUpperCase() + commandName.slice( 1 );
 	}
 
-	registerCommand( command: Command ): void {
+	public registerCommand( command: Command ): void {
 		if ( !command.name ) {
 			throw new Error( 'The command name is required' );
-		}
-
-		if ( this.commandExists( command.name ) ) {
-			throw new Error( `The command with name "${command.name}" already exists` );
 		}
 
 		if ( !this.commandGloballyRegistered( command.name ) ) {
@@ -109,7 +104,7 @@ export class CommandRegistry {
 		);
 	}
 
-	deleteCommand( name: string ): void {
+	public deleteCommand( name: string ): void {
 		const command = this.commandList.get( name );
 		if ( !command ) {
 			throw new Error( `The command with name "${name}" does not exist` );

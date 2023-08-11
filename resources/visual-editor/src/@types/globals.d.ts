@@ -10,6 +10,11 @@ import { CommandRegistryInterface } from '@/Commands/CommandRegistry';
 declare global {
 	interface Window {
 		mw: MediaWiki;
+		ve: {
+			slashCommands: {
+				CommandRegistry: CommandRegistryInterface;
+			};
+		};
 	}
 
 	// TODO: no types for VisualEditor

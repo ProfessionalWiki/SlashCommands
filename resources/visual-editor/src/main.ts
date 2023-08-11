@@ -5,9 +5,9 @@ import { FragmentResolver } from './Application/Resolvers/FragmentResolver';
 import { CommandsResolver } from './Application/Resolvers/CommandsResolver';
 import { CommandRegistry } from '@/Commands/CommandRegistry';
 
-ve.slashCommands = {
+window.ve.slashCommands = {
 	CommandRegistry: new CommandRegistry()
-}
+};
 
 /**
  * Setup commands list popup
@@ -21,3 +21,5 @@ mw.hook( 've.activationComplete' ).add( async function () {
 	await popupObject.setContent();
 	fragmentResolver.setSurface();
 } );
+
+// import './modified-main';
