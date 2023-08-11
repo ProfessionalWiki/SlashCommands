@@ -5,6 +5,7 @@
 /* eslint-enable */
 
 import type { MediaWiki } from './mediawiki/MwWindow';
+import { CommandRegistryInterface } from '@/Commands/CommandRegistry';
 
 declare global {
 	interface Window {
@@ -39,6 +40,10 @@ declare global {
 		namespace ce {
 			const annotationFactory: any;
 			const TextStyleAnnotation: any;
+		}
+
+		namespace slashCommands {
+			let CommandRegistry: CommandRegistryInterface;
 		}
 
 		const Range: any;

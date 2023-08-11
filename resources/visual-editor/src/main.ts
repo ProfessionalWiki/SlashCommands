@@ -5,13 +5,15 @@ import { FragmentResolver } from './Application/Resolvers/FragmentResolver';
 import { CommandsResolver } from './Application/Resolvers/CommandsResolver';
 import { CommandRegistry } from '@/Commands/CommandRegistry';
 
+ve.slashCommands = {
+	CommandRegistry: new CommandRegistry()
+}
+
 /**
  * Setup commands list popup
  */
 const fragmentResolver = new FragmentResolver();
-const commandsResolver = new CommandsResolver(
-	new CommandRegistry()
-);
+const commandsResolver = new CommandsResolver( ve.slashCommands.CommandRegistry );
 const popupObject = new CommandsPopup( fragmentResolver, commandsResolver );
 ( new CommandsController( popupObject, fragmentResolver, commandsResolver ) ).setUp();
 

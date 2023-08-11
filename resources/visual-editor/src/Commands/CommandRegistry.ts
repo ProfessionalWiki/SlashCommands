@@ -5,8 +5,10 @@ export interface Command {
 }
 
 export interface CommandRegistryInterface {
+	registerCommand( command: Command ): void;
 	getCommandList(): Map<string, Command>;
 	getInitialCommandList(): Map<string, Command>;
+	deleteCommand( name: string ): void;
 }
 
 export class CommandRegistry {
@@ -54,6 +56,10 @@ export class CommandRegistry {
 		return this.excludedCommands.includes( name );
 	}
 
+	private commandGloballyRegistered( name: string ): boolean {
+		return Object.prototype.hasOwnProperty.call( ve.ui.commandRegistry.registry, name );
+	}
+
 	private addCommand( command: Command ): void {
 		if ( !this.commandExists( command.name ) && !this.commandExcluded( command.name ) ) {
 			this.commandList.set( command.name, {
@@ -77,6 +83,22 @@ export class CommandRegistry {
 			( commandName.charAt( 0 ).toUpperCase() + commandName.slice( 1 ) );
 	}
 
+	registerCommand( command: Command ): void {
+		if ( !command.name ) {
+			throw new Error( 'The command name is required' );
+		}
+
+		if ( this.commandExists( command.name ) ) {
+			throw new Error( `The command with name "${command.name}" already exists` );
+		}
+
+		if ( !this.commandGloballyRegistered( command.name ) ) {
+			throw new Error( `The command with name "${command.name}" is not globally registered, see "ve.ui.commandRegistry" for details` );
+		}
+
+		this.addCommand( command );
+	}
+
 	public getCommandList(): Map<string, Command> {
 		return this.commandList;
 	}
@@ -85,5 +107,14 @@ export class CommandRegistry {
 		return new Map(
 			[ ...this.commandList ].filter( ( [ name ] ) => this.initialCommands.includes( name ) )
 		);
+	}
+
+	deleteCommand( name: string ): void {
+		const command = this.commandList.get( name );
+		if ( !command ) {
+			throw new Error( `The command with name "${name}" does not exist` );
+		}
+
+		this.commandList.delete( name );
 	}
 }

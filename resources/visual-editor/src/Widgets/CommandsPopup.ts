@@ -97,6 +97,7 @@ export class CommandsPopup {
 		CommandsStore.set( COMMANDS_LIST_LENGHT, commandsList.size );
 
 		this.popup.$body.find( '.commands-list' ).html( content );
+		this.popup.$body.scrollTop( 0 );
 	}
 
 	public getCommandElTemplate( commandsList: Map<string, Command> ): string {
