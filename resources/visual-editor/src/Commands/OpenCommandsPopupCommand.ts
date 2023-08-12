@@ -136,7 +136,7 @@ export class OpenCommandsPopupCommand {
 	private calculatePosition(): Position {
 		const popupHeight = 330;
 		const topRowHeight = 17;
-		const bottomRowHeight = 7;
+		const bottomRowHeight = 20;
 		const documentEl = $( document );
 		const windowHeight = $( window ).height();
 		const scrollTop = documentEl.scrollTop();
