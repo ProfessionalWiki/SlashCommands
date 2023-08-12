@@ -4,15 +4,17 @@ export interface Command {
 	label?: string;
 }
 
+export type CommandList = Map<string, Command>;
+
 export interface CommandRegistryInterface {
 	registerCommand( command: Command ): void;
-	getCommandList(): Map<string, Command>;
-	getInitialCommandList(): Map<string, Command>;
+	getCommandList(): CommandList;
+	getInitialCommandList(): CommandList;
 	deleteCommand( name: string ): void;
 }
 
 export class CommandRegistry {
-	private readonly commandList: Map<string, Command>;
+	private readonly commandList: CommandList;
 	private readonly initialCommands = [
 		'bold', 'italic', 'underline', 'strikethrough', 'big', 'small', 'code',
 		'heading1', 'heading2', 'heading3', 'heading4', 'heading5', 'heading6',
@@ -94,11 +96,11 @@ export class CommandRegistry {
 		this.addCommand( command );
 	}
 
-	public getCommandList(): Map<string, Command> {
+	public getCommandList(): CommandList {
 		return this.commandList;
 	}
 
-	public getInitialCommandList(): Map<string, Command> {
+	public getInitialCommandList(): CommandList {
 		return new Map(
 			[ ...this.commandList ].filter( ( [ name ] ) => this.initialCommands.includes( name ) )
 		);

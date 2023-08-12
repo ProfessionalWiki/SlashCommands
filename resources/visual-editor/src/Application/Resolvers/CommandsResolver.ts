@@ -1,27 +1,27 @@
 import { CommandsPopup, NO_RESULTS } from '../../Widgets/CommandsPopup';
 import { FragmentResolver } from './FragmentResolver';
-import type { CommandRegistryInterface, Command } from '@/Commands/CommandRegistry';
+import { CommandList } from "@/Commands/CommandRegistry";
 
 export class CommandsResolver {
 
-	public constructor( private readonly commandRegistry: CommandRegistryInterface ) {
+	public constructor(
+		private readonly fullCommandList: CommandList,
+		private readonly initialCommandList: CommandList
+	) {
 	}
 
-	public getCommands( search = '' ): Map<string, Command> {
+	public getCommands( search = '' ): CommandList {
 		if ( search.length ) {
-			return this.filterCommands(
-				this.commandRegistry.getCommandList(),
-				search.toLowerCase()
-			);
+			return this.filterCommands( this.fullCommandList, search.toLowerCase() );
 		}
 
-		return this.commandRegistry.getInitialCommandList();
+		return this.initialCommandList;
 	}
 
 	private filterCommands(
-		commandList: Map<string, Command>,
+		commandList: CommandList,
 		search: string
-	): Map<string, Command> {
+	): CommandList {
 		return new Map(
 			[ ...commandList ]
 				.filter( ( [ , command ] ) => {
