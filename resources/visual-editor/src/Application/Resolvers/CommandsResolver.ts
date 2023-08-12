@@ -1,6 +1,6 @@
 import { CommandsPopup, NO_RESULTS } from '../../Widgets/CommandsPopup';
 import { FragmentResolver } from './FragmentResolver';
-import { CommandList } from "@/Commands/CommandRegistry";
+import { CommandList } from '@/Commands/CommandRegistry';
 
 export class CommandsResolver {
 
