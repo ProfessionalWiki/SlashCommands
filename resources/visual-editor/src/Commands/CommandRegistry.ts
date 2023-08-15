@@ -29,7 +29,9 @@ export class CommandRegistry {
 		'mwLanguageVariant-filter', 'mwLanguageVariant-name', 'mwLanguageVariant-twoway',
 		'mwLanguageVariant-oneway', 'mwNonBreakingSpace', 'autolinkMagicLink', 'mwPre', 'showChanges',
 		'saveMinoredit', 'saveWatchthis', 'transclusionFromSequence', 'alienExtension', 'transclusion',
-		'syntaxhighlightDialog'
+		'syntaxhighlightDialog', 'selectAll', 'meta', 'meta/settings', 'meta/advanced', 'meta/categories',
+		'meta/languages', 'meta/templatesUsed', 'findAndReplace', 'findNext', 'findPrevious', 'commandHelp',
+		'changeDirectionality', 'pasteSpecial', 'insertColumnAfter', 'moveColumnAfter', 'undo', 'redo', 'clear'
 	] as string[];
 
 	public constructor() {
