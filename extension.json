@@ -28,6 +28,7 @@
 
 	"ResourceModules": {
 		"ext.slash-commands.visual-editor": {
+			"es6": true,
 			"dependencies": [
 				"ext.visualEditor.mwcore",
 				"ext.visualEditor.mwimage.core",
