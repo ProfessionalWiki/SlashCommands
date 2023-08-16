@@ -29,6 +29,12 @@ Installation instructions:
 
 ## Release notes
 
+### Version 1.1.0 - 2023-08-16
+
+* Added link and other commands
+* Added plugin system for registering custom slash commands
+* Fixed UI bugs
+
 ### Version 1.0.0 - 2023-06-15
 
 Initial release
