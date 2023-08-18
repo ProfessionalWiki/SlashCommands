@@ -31,6 +31,7 @@ export class OpenCommandsPopupCommand {
 	private readonly popup: OO.ui.PopupWidget;
 	private ID: string;
 	private surface: typeof ve.ui.Surface;
+	private currentElementIndex = 0;
 
 	public constructor(
 		private readonly popupObject: CommandsPopup,
@@ -131,6 +132,7 @@ export class OpenCommandsPopupCommand {
 			left: elPosition.left + 'px'
 		} );
 		wrapEl.find( '.oo-ui-popupWidget-body' ).scrollTop( 0 );
+		this.currentElementIndex = 0;
 	}
 
 	private calculatePosition(): Position {
@@ -269,28 +271,28 @@ export class OpenCommandsPopupCommand {
 
 	private addAutoScrolling( element: Element ): void {
 		const parent = element.closest( '.oo-ui-popupWidget-body' ) as HTMLElementTagNameMap['div'];
+		const wrapParent = parent.querySelector( '.commands-list' ) as HTMLElementTagNameMap['div'];
+		const el = element as HTMLElementTagNameMap['div'];
+		const elHeight = el.offsetHeight;
 		const parentHeight = parent.offsetHeight;
-		const parentRect = parent.getBoundingClientRect();
-		const elemRect = element.getBoundingClientRect();
-		const scrollHeight = parent.scrollHeight;
+		const listHeight = wrapParent.offsetHeight;
+		const elIndex = parseInt( el.getAttribute( 'tabindex' ) );
 
-		// up moving
-		if ( elemRect.top < parentRect.top ) {
-			if ( elemRect.top <= 0 ) {
-				parent.scrollTop = 0;
-			} else {
-				parent.scrollTop = parent.scrollTop - elemRect.height;
+		if ( elIndex === 0 ) {
+			parent.scrollTop = 0;
+		} else if ( this.currentElementIndex === 0 && elIndex > 1 ) {
+			parent.scrollTop = listHeight;
+		} else if ( elIndex > this.currentElementIndex ) {
+			// down moving
+			if ( parentHeight < el.offsetTop + elHeight ) {
+				parent.scrollTop = parent.scrollTop + elHeight;
 			}
+		} else if ( elIndex < this.currentElementIndex ) {
+			// up moving
+			parent.scrollTop = parent.scrollTop - elHeight;
 		}
 
-		// down moving
-		if ( elemRect.bottom >= ( parentRect.top + parentHeight ) ) {
-			if ( elemRect.top >= scrollHeight ) {
-				parent.scrollTop = scrollHeight;
-			} else {
-				parent.scrollTop = parent.scrollTop + elemRect.height;
-			}
-		}
+		this.currentElementIndex = elIndex;
 	}
 
 	private runCommand( e: EventObject ): boolean {
