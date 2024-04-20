@@ -37,7 +37,7 @@ Installation instructions:
 
 ### Version 1.0.0 - 2023-06-15
 
-Initial release
+Initial release — [Release announcement](https://www.pro.wiki/news/Slash-Commands-MediaWiki)
 
 * Support for MediaWiki 1.39
 * Support for PHP 7.4 and above
