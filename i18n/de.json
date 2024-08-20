@@ -1,9 +1,9 @@
 {
-  "@metadata": {
-    "authors": [
-      "Karsten Hoffmeyer"
-    ]
-  },
-  "slash-commands-name": "Slash Commands",
-  "slash-commands-description": "Ermöglicht Slash-Befehle für den visuellen Editor"
+	"@metadata": {
+		"authors": [
+			"Karsten Hoffmeyer"
+		]
+	},
+	"slash-commands-name": "Slash Commands",
+	"slash-commands-description": "Ermöglicht Slash-Befehle für den visuellen Editor"
 }
