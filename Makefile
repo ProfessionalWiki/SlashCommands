@@ -45,13 +45,13 @@ parser:
 js: visual-editor-build
 
 visual-editor-install:
-	cd resources/visual-editor && docker-compose run node npm install
+	cd resources/visual-editor && docker compose run node npm install
 
 visual-editor-build:
-	cd resources/visual-editor && docker-compose run node npm run build
+	cd resources/visual-editor && docker compose run node npm run build
 
 visual-editor-lint:
-	cd resources/visual-editor && docker-compose run node npm run lint
+	cd resources/visual-editor && docker compose run node npm run lint
 
 visual-editor:
 	$(MAKE) visual-editor-build
