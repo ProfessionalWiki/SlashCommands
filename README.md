@@ -2,15 +2,15 @@
 
 MediaWiki extension that adds "slash commands" to the Visual Editor.
 
+[Professional Wiki] created this extension and provides [MediaWiki Development], [MediaWiki Hosting],
+and [MediaWiki Consulting] services.
+
 **Table of Contents**
 
+- [Usage documentation](https://www.pro.wiki/help/mediawiki-slash-commands)
 - [Installation](#installation)
 - [Development](#development)
 - [Release notes](#release-notes)
-
-
-[Professional Wiki] created this extension and provides [MediaWiki Development], [MediaWiki Hosting],
-and [MediaWiki Consulting] services.
 
 ## Installation
 
