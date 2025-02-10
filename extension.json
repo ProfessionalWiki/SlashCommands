@@ -7,6 +7,8 @@
 		"[https://Professional.Wiki/ Professional Wiki]"
 	],
 
+	"license-name": "GPL-2.0-or-later",
+
 	"url": "https://www.pro.wiki/help/mediawiki-slash-commands",
 
 	"descriptionmsg": "slash-commands-description",
