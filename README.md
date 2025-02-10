@@ -8,17 +8,22 @@ MediaWiki extension that adds "slash commands" to the Visual Editor.
 - [Development](#development)
 - [Release notes](#release-notes)
 
+
+[Professional Wiki] created this extension and provides [MediaWiki Development], [MediaWiki Hosting]
+, and [MediaWiki Consulting] services.
+
 ## Installation
 
 Platform requirements:
 
 * [MediaWiki] 1.39 or later (tested with 1.39)
+* [VisualEditor] 1.39 or later (tested with 1.39)
 * [PHP] is NOT used by this extension, so its version does not matter
 
 Installation instructions:
 
 * Clone extension into `extensions/SlashCommands/`
-* Add `wfLoadExtension( 'SlashCommands' );` to `LocalSettings.php`
+* Add `wfLoadExtension( 'SlashCommands' );` to [LocalSettings.php]
 
 ## Development
 
@@ -43,9 +48,11 @@ Initial release — [Release announcement](https://www.pro.wiki/news/Slash-Comma
 * Support for PHP 7.4 and above
 * Slash command menu with formatting, list, and insert commands
 
-[Professional.Wiki]: https://professional.wiki
+[Professional Wiki]: https://professional.wiki
+[MediaWiki Hosting]: https://pro.wiki
+[MediaWiki Development]: https://professional.wiki/en/mediawiki-development
+[MediaWiki Consulting]: https://professional.wiki/en/mediawiki-consulting-services
 [MediaWiki]: https://www.mediawiki.org
+[VisualEditor]: https://www.mediawiki.org/wiki/Extension:VisualEditor
 [PHP]: https://www.php.net
-[Composer]: https://getcomposer.org
-[Composer install]: https://professional.wiki/en/articles/installing-mediawiki-extensions-with-composer
 [LocalSettings.php]: https://www.pro.wiki/help/mediawiki-localsettings-php-guide
