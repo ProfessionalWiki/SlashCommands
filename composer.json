@@ -1,7 +1,7 @@
 {
 	"name": "professional-wiki/slash-commands",
+	"license": "GPL-2.0-or-later",
 	"type": "mediawiki-extension",
-	"license": "proprietary",
 	"description": "Adds slash commands to the Visual Editor",
 	"homepage": "https://professional.wiki/en/extension/slash-commands",
 	"authors": [
