@@ -1,6 +1,6 @@
 {
 	"name": "professional-wiki/slash-commands",
-	"license": "proprietary",
+	"license": "GPL-2.0-or-later",
 	"description": "Adds slash commands to the Visual Editor",
 	"authors": [
 		{
