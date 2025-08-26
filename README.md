@@ -7,7 +7,7 @@ and [MediaWiki Consulting] services.
 
 **Table of Contents**
 
-- [Usage documentation](https://www.pro.wiki/help/mediawiki-slash-commands)
+- [Usage documentation](https://professional.wiki/en/extension/slash-commands#Usage)
 - [Installation](#installation)
 - [Development](#development)
 - [Release notes](#release-notes)
