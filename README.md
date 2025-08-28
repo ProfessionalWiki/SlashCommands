@@ -36,6 +36,10 @@ Installation instructions:
 
 ## Release notes
 
+### Version 1.2.0 - 2025-08-29
+
+* Added German translations
+
 ### Version 1.1.0 - 2023-08-16
 
 * Added link and other commands
