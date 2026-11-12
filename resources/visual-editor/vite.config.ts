@@ -8,14 +8,14 @@ export default defineConfig( {
 				entryFileNames: 'assets/[name].js',
 				chunkFileNames: 'assets/[name].js',
 				assetFileNames: 'assets/[name].[ext]',
-				banner: '/*!/*@nomin*/'
-			}
+				banner: '/*!/*@nomin*/',
+			},
 		},
-		target: 'es2015'
+		target: 'es2015',
 	},
 	resolve: {
 		alias: {
-			'@': path.resolve( __dirname, './src' )
-		}
-	}
+			'@': path.resolve( __dirname, './src' ),
+		},
+	},
 } );

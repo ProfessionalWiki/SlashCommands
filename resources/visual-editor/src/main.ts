@@ -6,7 +6,7 @@ import { CommandsResolver } from './Application/Resolvers/CommandsResolver';
 import { CommandRegistry } from '@/Commands/CommandRegistry';
 
 window.ve.slashCommands = {
-	CommandRegistry: new CommandRegistry()
+	CommandRegistry: new CommandRegistry(),
 };
 
 /**
@@ -15,12 +15,16 @@ window.ve.slashCommands = {
 const fragmentResolver = new FragmentResolver();
 const commandsResolver = new CommandsResolver(
 	ve.slashCommands.CommandRegistry.getCommandList(),
-	ve.slashCommands.CommandRegistry.getInitialCommandList()
+	ve.slashCommands.CommandRegistry.getInitialCommandList(),
 );
 const popupObject = new CommandsPopup( fragmentResolver, commandsResolver );
 ( new CommandsController( popupObject, fragmentResolver, commandsResolver ) ).setUp();
 
-mw.hook( 've.activationComplete' ).add( async function () {
+// A top-level async arrow function would make the build wrap this module in a
+// CommonJS shim that ends in `export`, which ResourceLoader cannot load.
+async function onActivationComplete(): Promise<void> {
 	await popupObject.setContent();
 	fragmentResolver.setSurface();
-} );
+}
+
+mw.hook( 've.activationComplete' ).add( onActivationComplete );

@@ -15,11 +15,13 @@ export interface CommandRegistryInterface {
 
 export class CommandRegistry {
 	private readonly commandList: CommandList;
+
 	private readonly initialCommands = [
 		'bold', 'italic', 'underline', 'strikethrough', 'big', 'small', 'code',
 		'heading1', 'heading2', 'heading3', 'heading4', 'heading5', 'heading6',
-		'table', 'gallery', 'comment', 'link'
+		'table', 'gallery', 'comment', 'link',
 	] as string[];
+
 	private readonly excludedCommands = [
 		'showSave', 'linkNoExpand', 'numberWrapOnce', 'bulletWrapOnce', 'autolinkUrl',
 		'delete', 'backspace', 'submit', 'cancel', 'focusContext', 'insertTable',
@@ -31,7 +33,7 @@ export class CommandRegistry {
 		'saveMinoredit', 'saveWatchthis', 'transclusionFromSequence', 'alienExtension', 'transclusion',
 		'syntaxhighlightDialog', 'selectAll', 'meta', 'meta/settings', 'meta/advanced', 'meta/categories',
 		'meta/languages', 'meta/templatesUsed', 'findAndReplace', 'findNext', 'findPrevious', 'commandHelp',
-		'changeDirectionality', 'pasteSpecial', 'insertColumnAfter', 'moveColumnAfter', 'undo', 'redo', 'clear'
+		'changeDirectionality', 'pasteSpecial', 'insertColumnAfter', 'moveColumnAfter', 'undo', 'redo', 'clear',
 	] as string[];
 
 	public constructor() {
@@ -65,7 +67,7 @@ export class CommandRegistry {
 			this.commandList.set( command.name, {
 				name: command.name,
 				icon: command.icon ?? this.getCommandIcon( command.name ),
-				label: command.label ?? this.getCommandLabel( command.name )
+				label: command.label ?? this.getCommandLabel( command.name ),
 			} );
 		}
 	}
@@ -82,7 +84,7 @@ export class CommandRegistry {
 		let label;
 		try {
 			label = ve.ui?.toolFactory?.registry?.[ commandName ]?.static?.title();
-		} catch ( e ) {}
+		} catch {}
 		return label ?? commandName.charAt( 0 ).toUpperCase() + commandName.slice( 1 );
 	}
 
@@ -92,7 +94,7 @@ export class CommandRegistry {
 		}
 
 		if ( !this.commandGloballyRegistered( command.name ) ) {
-			throw new Error( `The command with name "${command.name}" is not globally registered, see "ve.ui.commandRegistry" for details` );
+			throw new Error( `The command with name "${ command.name }" is not globally registered, see "ve.ui.commandRegistry" for details` );
 		}
 
 		this.addCommand( command );
@@ -104,14 +106,14 @@ export class CommandRegistry {
 
 	public getInitialCommandList(): CommandList {
 		return new Map(
-			[ ...this.commandList ].filter( ( [ name ] ) => this.initialCommands.includes( name ) )
+			[ ...this.commandList ].filter( ( [ name ] ) => this.initialCommands.includes( name ) ),
 		);
 	}
 
 	public deleteCommand( name: string ): void {
 		const command = this.commandList.get( name );
 		if ( !command ) {
-			throw new Error( `The command with name "${name}" does not exist` );
+			throw new Error( `The command with name "${ name }" does not exist` );
 		}
 
 		this.commandList.delete( name );
