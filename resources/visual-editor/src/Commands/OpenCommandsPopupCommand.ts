@@ -2,7 +2,7 @@ import { CommandsPopup } from '../Widgets/CommandsPopup';
 import {
 	CommandsStore,
 	REPLACE_FRAGMENT,
-	START_FRAGMENT, WRAP_BLOCK_ID
+	START_FRAGMENT, WRAP_BLOCK_ID,
 } from '../Stores/CommandsStore';
 import { FragmentResolver } from '../Application/Resolvers/FragmentResolver';
 import { CommandsResolver } from '../Application/Resolvers/CommandsResolver';
@@ -12,7 +12,7 @@ interface EventObject extends Event {
 	keyCode: number;
 }
 
-interface OpenFn extends Function {
+interface OpenFn {
 	(): void;
 	super: any;
 }
@@ -28,16 +28,20 @@ export const OPEN_COMMANDS_POPUP = 'openCommandsPopup';
 export class OpenCommandsPopupCommand {
 
 	private readonly commandName: string = OPEN_COMMANDS_POPUP;
+
 	private readonly popup: OO.ui.PopupWidget;
+
 	private ID: string;
+
 	private surface: typeof ve.ui.Surface;
+
 	private currentElementIndex = 0;
 
 	public constructor(
 		private readonly popupObject: CommandsPopup,
 		private readonly executeSymbol: string,
 		private readonly fragmentResolver: FragmentResolver,
-		public readonly commandsResolver: CommandsResolver
+		public readonly commandsResolver: CommandsResolver,
 	) {
 		this.popup = popupObject.getInstance();
 	}
@@ -49,7 +53,7 @@ export class OpenCommandsPopupCommand {
 		const CommandsPopupCommand = <OpenFn> function VeUiCommandsPopupCommand() {
 			CommandsPopupCommand.super.call(
 				this,
-				commandName
+				commandName,
 			);
 		};
 		OO.inheritClass( CommandsPopupCommand, ve.ui.Command );
@@ -79,8 +83,8 @@ export class OpenCommandsPopupCommand {
 			new ve.ui.Sequence(
 				commandName,
 				commandName,
-				executeSymbol
-			)
+				executeSymbol,
+			),
 		);
 	}
 
@@ -112,7 +116,7 @@ export class OpenCommandsPopupCommand {
 
 		const replaceFragment = surfaceModel.getLinearFragment( new ve.Range(
 			currentFragment.selection.range.end - 1,
-			currentFragment.selection.range.end
+			currentFragment.selection.range.end,
 		) );
 
 		replaceFragment.annotateContent( 'set', 'textStyle/userInput' );
@@ -129,7 +133,7 @@ export class OpenCommandsPopupCommand {
 		wrapEl.css( {
 			top: elPosition.top ? elPosition.top + 'px' : 'unset',
 			bottom: elPosition.bottom ? elPosition.bottom + 'px' : 'unset',
-			left: elPosition.left + 'px'
+			left: elPosition.left + 'px',
 		} );
 		wrapEl.find( '.oo-ui-popupWidget-body' ).scrollTop( 0 );
 		this.currentElementIndex = 0;
@@ -151,14 +155,14 @@ export class OpenCommandsPopupCommand {
 			return {
 				top: null,
 				bottom: bottom,
-				left: position.left
+				left: position.left,
 			};
 		}
 
 		return {
 			top: top,
 			bottom: null,
-			left: position.left
+			left: position.left,
 		};
 	}
 
@@ -168,14 +172,14 @@ export class OpenCommandsPopupCommand {
 
 		const replaceFragment = surfaceModel.getLinearFragment( new ve.Range(
 			currentFragment.selection.range.end - 1,
-			currentFragment.selection.range.end
+			currentFragment.selection.range.end,
 		) );
 
 		replaceFragment.annotateContent( 'clear', 'textStyle/userInput' );
 
 		const cursorFragment = surfaceModel.getLinearFragment( new ve.Range(
 			replaceFragment.selection.range.end,
-			replaceFragment.selection.range.end
+			replaceFragment.selection.range.end,
 		) );
 		cursorFragment.select();
 	}
@@ -311,7 +315,7 @@ export class OpenCommandsPopupCommand {
 				this.popup,
 				e,
 				this.fragmentResolver,
-				focusElem
+				focusElem,
 			);
 		}
 		return true;

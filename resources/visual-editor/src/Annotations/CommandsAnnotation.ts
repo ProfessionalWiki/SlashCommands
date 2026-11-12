@@ -1,7 +1,7 @@
 import { CommandsStore, WRAP_BLOCK_ID } from '../Stores/CommandsStore';
 import { CommandsPopupWidget } from '../Widgets/Factories/CommandsPopupFactory';
 
-interface AnnotationFn extends Function {
+interface AnnotationFn {
 	(): void;
 	static: {
 		name?: string;
@@ -14,11 +14,12 @@ interface AnnotationFn extends Function {
 export class CommandsAnnotation {
 
 	private readonly tagName: string = 'span';
+
 	private readonly name: string = 'textStyle/userInput';
 
 	public constructor(
 		private readonly popup: CommandsPopupWidget,
-		private readonly className: string
+		private readonly className: string,
 	) {}
 
 	public setUp(): void {

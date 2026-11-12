@@ -10,18 +10,19 @@ export const EXECUTE_SYMBOL = '/';
 export class CommandsController {
 
 	private readonly executeSymbol: string = EXECUTE_SYMBOL;
+
 	private readonly className: string = 'commands-popup-wrap';
 
 	public constructor(
 		public readonly popup: CommandsPopup,
 		public readonly fragmentResolver: FragmentResolver,
-		public readonly commandsResolver: CommandsResolver
+		public readonly commandsResolver: CommandsResolver,
 	) {}
 
 	public setUp(): void {
 		const annotation = new CommandsAnnotation(
 			this.popup.getInstance(),
-			this.className
+			this.className,
 		);
 		annotation.setUp();
 
@@ -29,14 +30,14 @@ export class CommandsController {
 			this.popup,
 			this.executeSymbol,
 			this.fragmentResolver,
-			this.commandsResolver
+			this.commandsResolver,
 		);
 		openPopupCommand.setUp();
 
 		const closePopupCommand = new CloseCommandsPopupCommand(
 			this.popup,
 			this.fragmentResolver,
-			this.commandsResolver
+			this.commandsResolver,
 		);
 		closePopupCommand.setUp();
 	}

@@ -20,7 +20,7 @@ export class FragmentResolver {
 
 	public isOutsideSearchRange(
 		currentFragment: typeof ve.dm.SurfaceFragment,
-		includingExecSymbol = false
+		includingExecSymbol = false,
 	): boolean {
 		const searchRange = this.getSearchRange();
 		const currStart = currentFragment.selection.range.start + ( includingExecSymbol ? 1 : 0 );
@@ -46,7 +46,7 @@ export class FragmentResolver {
 		return {
 			start: startFragment.selection.range.start,
 			end: startFragment.selection.range.start +
-				( searchFragment ? searchFragment.length : 0 )
+				( searchFragment ? searchFragment.length : 0 ),
 		};
 	}
 
@@ -64,7 +64,7 @@ export class FragmentResolver {
 	public getFragment( range: Range ): typeof ve.dm.SurfaceFragment {
 		return this.surface.getModel().getLinearFragment( new ve.Range(
 			range.start,
-			range.end
+			range.end,
 		) );
 	}
 
@@ -72,7 +72,7 @@ export class FragmentResolver {
 		const searchRange = this.getSearchRange();
 		const searchFragment = this.getFragment( {
 			start: searchRange.start - 1,
-			end: searchRange.end
+			end: searchRange.end,
 		} );
 
 		if ( searchFragment !== null ) {
@@ -89,11 +89,11 @@ export class FragmentResolver {
 
 	private setCursorAfterReplacing(
 		currentFragment: typeof ve.dm.SurfaceFragment,
-		searchRate: Range
+		searchRate: Range,
 	): void {
 		const cursorRange = {
 			start: searchRate.end,
-			end: searchRate.end
+			end: searchRate.end,
 		};
 
 		if (
@@ -112,7 +112,7 @@ export class FragmentResolver {
 		const searchRateStart = searchRate.start - 1;
 		const searchFragment = this.getFragment( {
 			start: searchRateStart,
-			end: searchRate.end
+			end: searchRate.end,
 		} );
 
 		if ( searchFragment !== null ) {
@@ -122,7 +122,7 @@ export class FragmentResolver {
 
 				const cursorFragment = this.getFragment( {
 					start: searchRateStart,
-					end: searchRateStart
+					end: searchRateStart,
 				} );
 				cursorFragment.select();
 			}

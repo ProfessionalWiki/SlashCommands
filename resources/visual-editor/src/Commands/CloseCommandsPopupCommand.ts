@@ -4,19 +4,20 @@ import { FragmentResolver } from '../Application/Resolvers/FragmentResolver';
 import { CommandsResolver } from '../Application/Resolvers/CommandsResolver';
 import { EXECUTE_SYMBOL } from '../Application/CommandsController';
 
-interface CloseFn extends Function {
+interface CloseFn {
 	(): void;
 	super: any;
 }
 export class CloseCommandsPopupCommand {
 
 	private readonly commandName: string = 'closeCommandsPopup';
+
 	private surface: typeof ve.ui.Surface;
 
 	public constructor(
 		private readonly popup: CommandsPopup,
 		private readonly fragmentResolver: FragmentResolver,
-		private readonly commandsResolver: CommandsResolver
+		private readonly commandsResolver: CommandsResolver,
 	) {}
 
 	public setUp(): void {
@@ -25,7 +26,7 @@ export class CloseCommandsPopupCommand {
 		const ClosePopupCommand = <CloseFn> function VeUiCloseCommand() {
 			ClosePopupCommand.super.call(
 				this,
-				commandName
+				commandName,
 			);
 		};
 		OO.inheritClass( ClosePopupCommand, ve.ui.Command );
@@ -48,9 +49,9 @@ export class CloseCommandsPopupCommand {
 				/.$/,
 				0,
 				{
-					checkOnDelete: true
-				}
-			)
+					checkOnDelete: true,
+				},
+			),
 		);
 	}
 
@@ -62,7 +63,7 @@ export class CloseCommandsPopupCommand {
 			const currentFragment = surfaceModel.getFragment();
 			const searchFragment = surfaceModel.getLinearFragment( new ve.Range(
 				startFragment.selection.range.start,
-				currentFragment.selection.range.end
+				currentFragment.selection.range.end,
 			) );
 			const searchText = searchFragment.getText( true );
 
@@ -95,7 +96,7 @@ export class CloseCommandsPopupCommand {
 		const surfaceModel = this.surface.getModel();
 		const prevFragment = surfaceModel.getLinearFragment( new ve.Range(
 			currentFragment.selection.range.start - 1,
-			currentFragment.selection.range.end
+			currentFragment.selection.range.end,
 		) );
 		const prevText = prevFragment?.getText( true );
 

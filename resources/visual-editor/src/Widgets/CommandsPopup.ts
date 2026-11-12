@@ -1,7 +1,7 @@
 import {
 	COMMANDS_LIST_LENGHT,
 	CommandsStore, COUNT_NO_RESULTS_TRYING,
-	REPLACE_FRAGMENT, SEARCH_FRAGMENT, START_FRAGMENT, WRAP_BLOCK_ID
+	REPLACE_FRAGMENT, SEARCH_FRAGMENT, START_FRAGMENT, WRAP_BLOCK_ID,
 } from '../Stores/CommandsStore';
 import { CommandsPopupFactory, CommandsPopupWidget } from './Factories/CommandsPopupFactory';
 import { FragmentResolver } from '../Application/Resolvers/FragmentResolver';
@@ -14,12 +14,14 @@ export const NO_RESULTS = 'no-results';
 export class CommandsPopup {
 
 	private readonly popup: OO.ui.PopupWidget;
+
 	private readonly className: string = 'insert-commands-list-wrap';
+
 	public readonly commandClassName: string = COMMAND_CLASS_NAME;
 
 	public constructor(
 		private readonly fragmentResolver: FragmentResolver,
-		private readonly commandsResolver: CommandsResolver
+		private readonly commandsResolver: CommandsResolver,
 	) {
 		this.popup = CommandsPopupFactory.create( {
 			$content: $( '<div class="commands-list"></div>' ),
@@ -31,7 +33,7 @@ export class CommandsPopup {
 			position: 'after',
 			verticalPosition: 'above',
 			hideWhenOutOfView: true,
-			width: 210
+			width: 210,
 		}, commandsResolver, fragmentResolver );
 
 		this.setClosingHookHandler().then();
@@ -87,7 +89,7 @@ export class CommandsPopup {
 		let content = '';
 
 		if ( !commandsList.size ) {
-			content = `<span class="${this.commandClassName}" role="button" data-command="${NO_RESULTS}">No results</span>`;
+			content = `<span class="${ this.commandClassName }" role="button" data-command="${ NO_RESULTS }">No results</span>`;
 			const countNoResultsTrying = CommandsStore.get( COUNT_NO_RESULTS_TRYING );
 			CommandsStore.set( COUNT_NO_RESULTS_TRYING, ( countNoResultsTrying + 1 ) );
 		} else {
@@ -103,10 +105,10 @@ export class CommandsPopup {
 	public getCommandElTemplate( commandsList: Map<string, Command> ): string {
 		let content = '';
 		let index = 0;
-		commandsList.forEach( function ( commandData: Command ): void {
-			content += `<span class="${COMMAND_CLASS_NAME}" tabindex="${index}" role="button" data-command="${commandData.name}">
-					<span class="oo-ui-iconElement-icon oo-ui-icon-${commandData.icon || 'noIcon'}"></span>
-					<span class="oo-ui-tool-title">${commandData.label}</span>
+		commandsList.forEach( ( commandData: Command ): void => {
+			content += `<span class="${ COMMAND_CLASS_NAME }" tabindex="${ index }" role="button" data-command="${ commandData.name }">
+					<span class="oo-ui-iconElement-icon oo-ui-icon-${ commandData.icon || 'noIcon' }"></span>
+					<span class="oo-ui-tool-title">${ commandData.label }</span>
 				</span>`;
 			index++;
 		} );

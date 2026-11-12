@@ -20,7 +20,7 @@ export const CommandsStore: CommandsStoreObject = ( function createStore() {
 		insertCommandsList: null,
 		wrapBlockID: null,
 		commandsListLenght: 0,
-		countNoResultsTrying: 0
+		countNoResultsTrying: 0,
 	};
 
 	function get( key: string ): typeof ve.dm.SurfaceFragment {
@@ -47,6 +47,6 @@ export const CommandsStore: CommandsStoreObject = ( function createStore() {
 	return {
 		get,
 		set,
-		clear
+		clear,
 	};
 }() );

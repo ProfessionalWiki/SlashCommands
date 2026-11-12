@@ -6,7 +6,7 @@ export class CommandsResolver {
 
 	public constructor(
 		private readonly fullCommandList: CommandList,
-		private readonly initialCommandList: CommandList
+		private readonly initialCommandList: CommandList,
 	) {
 	}
 
@@ -20,13 +20,11 @@ export class CommandsResolver {
 
 	private filterCommands(
 		commandList: CommandList,
-		search: string
+		search: string,
 	): CommandList {
 		return new Map(
 			[ ...commandList ]
-				.filter( ( [ , command ] ) => {
-					return command.label.toLowerCase().includes( search );
-				} )
+				.filter( ( [ , command ] ) => command.label.toLowerCase().includes( search ) )
 				.sort( ( [ , commandA ], [ , commandB ] ): number => {
 					if (
 						commandA.label.toLowerCase().startsWith( search ) &&
@@ -38,7 +36,7 @@ export class CommandsResolver {
 						return 1;
 					}
 					return -1;
-				} )
+				} ),
 		);
 	}
 
@@ -46,7 +44,7 @@ export class CommandsResolver {
 		popup: OO.ui.PopupWidget,
 		e: { target: HTMLElement },
 		fragmentResolver: FragmentResolver,
-		element: HTMLElement = null
+		element: HTMLElement = null,
 	): boolean {
 		const currentElement: HTMLElement = element || e.target;
 
@@ -55,7 +53,7 @@ export class CommandsResolver {
 		}
 
 		const $targetEl = $( currentElement );
-		const $targetElParent = $targetEl.parents( `.${CommandsPopup.getCommandClassName()}` );
+		const $targetElParent = $targetEl.parents( `.${ CommandsPopup.getCommandClassName() }` );
 
 		if (
 			$targetEl.hasClass( CommandsPopup.getCommandClassName() ) ||

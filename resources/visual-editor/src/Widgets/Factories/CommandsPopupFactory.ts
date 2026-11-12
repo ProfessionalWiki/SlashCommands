@@ -1,9 +1,9 @@
 import { CommandsResolver } from '../../Application/Resolvers/CommandsResolver';
 import { FragmentResolver } from '../../Application/Resolvers/FragmentResolver';
 
-export interface CommandsPopupWidget extends OO.ui.PopupWidget {}
+export type CommandsPopupWidget = OO.ui.PopupWidget;
 
-interface PopupFn extends Function {
+interface PopupFn {
 	( params: object ): void;
 	super: any;
 }
@@ -13,13 +13,13 @@ export class CommandsPopupFactory {
 	public static create(
 		params: object,
 		commandsResolver: CommandsResolver,
-		fragmentResolver: FragmentResolver
+		fragmentResolver: FragmentResolver,
 	): OO.ui.PopupWidget {
 
 		const CommandsPopup = <PopupFn> function OoUiCommandsPopup( config ): void {
 			CommandsPopup.super.call(
 				this,
-				config
+				config,
 			);
 		};
 		OO.inheritClass( CommandsPopup, OO.ui.PopupWidget );
